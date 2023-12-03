@@ -5,6 +5,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    google()
     maven {
         url = uri("https://jitpack.io")
     }
@@ -12,9 +13,14 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+
     implementation("com.google.guava:guava:32.1.3-jre")
     implementation("io.arrow-kt:arrow-core:1.2.1")
     implementation("cc.ekblad.konbini:konbini:0.1.3")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks {
