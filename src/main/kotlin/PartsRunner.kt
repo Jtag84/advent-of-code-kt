@@ -30,10 +30,11 @@ private fun PartFunction.runTest(partNumber:Int, expected: Any){
     val result = this(testInputs)
     stopWatch.stop()
 
-    check(result == expected) { """
-        Part $partNumber test: Failed in ${stopWatch.elapsed().toKotlinDuration()}
-        expected $expected but was $result
-    """.trimIndent()}
+    check(result == expected) {
+        """
+            Part $partNumber test: Failed in ${stopWatch.elapsed().toKotlinDuration()}
+            expected $expected but was $result
+        """.trimIndent()}
 
     "Part 1 test: Succeeded in ${stopWatch.elapsed().toKotlinDuration()}".println()
 }

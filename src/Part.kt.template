@@ -1,0 +1,13 @@
+package <PACKAGE_NAME>
+
+import Part<PART_NUMBER>Function
+import run
+import runTest
+
+fun main() {
+    part<PART_NUMBER>.runTest(1)
+    part<PART_NUMBER>.run()
+}
+
+val part<PART_NUMBER> = Part<PART_NUMBER>Function { input -> 1}
+
