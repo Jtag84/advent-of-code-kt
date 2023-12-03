@@ -9,8 +9,8 @@ fun main() {
     part1.run()
 }
 
-val part1 = Part1Function { input ->
-    input
+val part1 = Part1Function { inputs ->
+    inputs.lines()
         .filter(String::isNotBlank)
         .sumOf {
             val leftDigit = getFirstDigitFromTheLeft(it)

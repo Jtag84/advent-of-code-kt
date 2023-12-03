@@ -9,8 +9,8 @@ fun main() {
     part2.run()
 }
 
-val part2= Part2Function { input ->
-    input
+val part2= Part2Function { inputs ->
+    inputs.lines()
         .filter { it.isNotBlank() }
         .sumOf {
             val leftDigit = getLeftSpelledOutOrPlainDigit(it)
