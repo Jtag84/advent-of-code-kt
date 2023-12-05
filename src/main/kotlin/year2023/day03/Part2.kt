@@ -38,4 +38,3 @@ val part2 = Part2Function { input ->
         .map { it.value[0].number * it.value[1].number }
         .sum()
 }
-

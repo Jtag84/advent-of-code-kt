@@ -24,5 +24,5 @@ fun getFirstDigitFromTheLeft(line: String): Int {
 }
 
 fun getFirstDigitFromTheRight(line: String): Int {
-    return line.reversed().first { it.isDigit() }.digitToInt()
+    return line.last { it.isDigit() }.digitToInt()
 }

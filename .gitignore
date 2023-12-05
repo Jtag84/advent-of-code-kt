@@ -2,3 +2,4 @@
 .idea
 build
 /cookieSession.txt
+**/inputs.txt
