@@ -1,20 +1,18 @@
 package year2023.day03
 
 import Coordinates
-import Part2Function
+import Part.Companion.part2
 import aroundWithDiagonals
 import arrow.core.partially1
 import com.google.common.collect.Sets
 import parseOrThrowException
-import run
-import runTest
 
 fun main() {
     part2.runTest(467835L)
     part2.run()
 }
 
-val part2 = Part2Function { input ->
+val part2 = part2 { input ->
     val schematicItems = input.lines()
         .filter(String::isNotBlank)
         .flatMapIndexed { lineNumber, line -> lineParser(lineNumber.toLong()).parseOrThrowException(line).toSet() }

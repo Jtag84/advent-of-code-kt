@@ -1,11 +1,9 @@
 package year2023.day04
 
-import Part1Function
+import Part.Companion.part1
 import cc.ekblad.konbini.*
 import com.google.common.collect.Sets
 import parseOrThrowException
-import run
-import runTest
 import kotlin.math.pow
 
 fun main() {
@@ -32,7 +30,7 @@ val scratchcardParser: Parser<Pair<WinningNumbers, MyNumbers>> = parser {
     Pair(winningNumbers, myNumbers)
 }
 
-val part1 = Part1Function { input ->
+val part1 = part1 { input ->
     input.lines()
         .asSequence()
         .filter(String::isNotBlank)

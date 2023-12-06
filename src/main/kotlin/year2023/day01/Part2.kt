@@ -1,15 +1,13 @@
 package year2023.day01
 
-import Part2Function
-import run
-import runTest
+import Part.Companion.part2
 
 fun main() {
     part2.runTest(281)
     part2.run()
 }
 
-val part2= Part2Function { inputs ->
+val part2 = part2 { inputs ->
     inputs.lines()
         .filter { it.isNotBlank() }
         .sumOf {

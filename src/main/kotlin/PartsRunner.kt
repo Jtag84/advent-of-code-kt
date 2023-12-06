@@ -4,61 +4,63 @@ import cc.ekblad.konbini.parse
 import com.google.common.base.Stopwatch
 import kotlin.time.toKotlinDuration
 
-fun interface PartFunction {
-    operator fun invoke(inputs : String): Any
-}
 
-fun interface Part1Function : PartFunction
-fun interface Part2Function : PartFunction
+class Part<T>(val partNumber: Int, val inputParser: Parser<T>, val solvingFunction: (T) -> Any) {
+    companion object {
+        fun <T> part1(inputParser: Parser<T>, solvingFunction: (T) -> Any): Part<T> {
+            return Part(1, inputParser, solvingFunction)
+        }
 
-fun <T> Parser<T>.parseOrThrowException(input:String) : T {
-    val parseResult = this.parse(input)
-    when(parseResult) {
-        is ParserResult.Ok -> return parseResult.result
-        else -> throw IllegalStateException(parseResult.toString())
+        fun part1(solvingFunction: (String) -> Any): Part<String> {
+            return Part(1, parseAll, solvingFunction)
+        }
+
+        fun <T> part2(inputParser: Parser<T>, solvingFunction: (T) -> Any): Part<T> {
+            return Part(2, inputParser, solvingFunction)
+        }
+
+        fun part2(solvingFunction: (String) -> Any): Part<String> {
+            return Part(2, parseAll, solvingFunction)
+        }
+
     }
-}
 
-fun Part1Function.run(){
-    runPart(1)
-}
+    fun runTest(expected: Any) {
+        val testInputs = solvingFunction.javaClass.readTestInputsPart(partNumber)
+        val stopWatch = Stopwatch.createStarted()
+        val result = solvingFunction(inputParser.parseOrThrowException(testInputs))
+        stopWatch.stop()
 
-fun Part2Function.run(){
-    runPart(2)
-}
-
-fun Part1Function.runTest(expected: Any){
-    runTest(1, expected)
-}
-
-fun Part2Function.runTest(expected: Any){
-    runTest(2, expected)
-}
-
-private fun PartFunction.runTest(partNumber:Int, expected: Any){
-    val testInputs = this.javaClass.readTestInputsPart(partNumber)
-    val stopWatch = Stopwatch.createStarted()
-    val result = this(testInputs)
-    stopWatch.stop()
-
-    check(result == expected) {
-        """
+        check(result == expected) {
+            """
             Part $partNumber test: Failed in ${stopWatch.elapsed().toKotlinDuration()}
             expected $expected but was $result
         """.trimIndent()}
 
-    "Part $partNumber test: Succeeded in ${stopWatch.elapsed().toKotlinDuration()}".println()
+        "Part $partNumber test: Succeeded in ${stopWatch.elapsed().toKotlinDuration()}".println()
+    }
+
+    fun run() {
+        val inputs = solvingFunction.javaClass.readInputs()
+        val stopWatch = Stopwatch.createStarted()
+        val parsedInputs = inputParser.parseOrThrowException(inputs)
+        val parsingTime = stopWatch.elapsed()
+        val result = solvingFunction(parsedInputs)
+        stopWatch.stop()
+        """
+        Part $partNumber: $result 
+        Parsed in ${parsingTime.toKotlinDuration()} Completed in ${stopWatch.elapsed().toKotlinDuration()}
+    """.trimIndent().println()
+    }
+
 }
 
-private fun PartFunction.runPart(partNumber:Int) {
-    val inputs = this.javaClass.readInputs()
-    val stopWatch = Stopwatch.createStarted()
-    val result = this(inputs)
-    stopWatch.stop()
-    """
-        Part $partNumber: $result 
-        Completed in ${stopWatch.elapsed().toKotlinDuration()}
-    """.trimIndent().println()
+fun <T> Parser<T>.parseOrThrowException(input: String): T {
+    val parseResult = this.parse(input)
+    when (parseResult) {
+        is ParserResult.Ok -> return parseResult.result
+        else -> throw IllegalStateException(parseResult.toString())
+    }
 }
 
 /**

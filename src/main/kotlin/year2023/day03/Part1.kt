@@ -1,14 +1,12 @@
 package year2023.day03
 
 import Coordinates
-import Part1Function
+import Part.Companion.part1
 import aroundWithDiagonals
 import arrow.core.partially1
 import cc.ekblad.konbini.*
 import parseOrThrowException
 import right
-import run
-import runTest
 
 fun main() {
     part1.runTest(4361L)
@@ -66,7 +64,7 @@ val lineParser = { lineNumber:Long ->
     }
 }
 
-val part1 = Part1Function { input ->
+val part1 = part1 { input ->
     val schematicItems = input.lines()
         .filter(String::isNotBlank)
         .flatMapIndexed { lineNumber, line -> lineParser(lineNumber.toLong()).parseOrThrowException(line).toSet() }

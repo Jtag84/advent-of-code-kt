@@ -1,18 +1,16 @@
 package year2023.day04
 
-import Part2Function
+import Part.Companion.part2
 import arrow.core.memoize
 import com.google.common.collect.Sets
 import parseOrThrowException
-import run
-import runTest
 
 fun main() {
     part2.runTest(30)
     part2.run()
 }
 
-val part2 = Part2Function { input ->
+val part2 = part2 { input ->
     val cards = input.lines()
         .filter(String::isNotBlank)
         .map { scratchcardParser.parseOrThrowException(it) }

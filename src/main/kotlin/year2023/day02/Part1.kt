@@ -1,10 +1,7 @@
 package year2023.day02
 
-import Part1Function
+import Part.Companion.part1
 import cc.ekblad.konbini.*
-import parseOrThrowException
-import run
-import runTest
 import year2023.day02.CubeColor.*
 
 fun main() {
@@ -53,14 +50,15 @@ val gameParser: Parser<Game> = parser {
     Game(gameId, handfuls.terms)
 }
 
-val gamesParser: Parser<List<Game>> = parser {
+val gamesParser: Parser<Games> = parser {
     val games = chain1(gameParser, parser{char('\n')})
     games.terms
 }
 
-val part1 = Part1Function { inputs ->
-    gamesParser.parseOrThrowException(inputs)
-        .filter {
+typealias Games = List<Game>
+
+val part1 = part1(gamesParser) { games ->
+    games.filter {
             it.getMaxRed() <= 12 && it.getMaxGreen() <= 13 && it.getMaxBlue() <= 14
         }
         .sumOf { it.gameId }
