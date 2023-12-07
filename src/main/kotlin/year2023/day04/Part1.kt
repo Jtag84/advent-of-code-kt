@@ -1,9 +1,6 @@
 package year2023.day04
 
 import Part.Companion.part1
-import cc.ekblad.konbini.*
-import com.google.common.collect.Sets
-import parseOrThrowException
 import kotlin.math.pow
 
 fun main() {
@@ -11,31 +8,8 @@ fun main() {
     part1.run()
 }
 
-typealias WinningNumbers = Set<Long>
-typealias MyNumbers = Set<Long>
-
-val scratchcardParser: Parser<Pair<WinningNumbers, MyNumbers>> = parser {
-    string("Card")
-    whitespace()
-    integer()
-    char(':')
-    whitespace()
-    val leftNumbers = chain(integer, whitespace)
-    val winningNumbers = leftNumbers.terms.toSet()
-    whitespace()
-    char('|')
-    whitespace()
-    val rightNumbers = chain(integer, whitespace)
-    val myNumbers = rightNumbers.terms.toSet()
-    Pair(winningNumbers, myNumbers)
-}
-
-val part1 = part1 { input ->
-    input.lines()
-        .asSequence()
-        .filter(String::isNotBlank)
-        .map { scratchcardParser.parseOrThrowException(it) }
-        .map { Sets.intersection(it.first, it.second).toSet() }
+val part1 = part1(scratchcardsParser) { myWinningNumbers ->
+    myWinningNumbers
         .map(::calculatePoints)
         .sum()
 }

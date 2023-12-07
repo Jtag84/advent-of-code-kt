@@ -2,19 +2,14 @@ package year2023.day04
 
 import Part.Companion.part2
 import arrow.core.memoize
-import com.google.common.collect.Sets
-import parseOrThrowException
 
 fun main() {
     part2.runTest(30)
     part2.run()
 }
 
-val part2 = part2 { input ->
-    val cards = input.lines()
-        .filter(String::isNotBlank)
-        .map { scratchcardParser.parseOrThrowException(it) }
-        .map { Sets.intersection(it.first, it.second).toSet() }
+val part2 = part2(scratchcardsParser) { myWinningNumbers ->
+    val cards = myWinningNumbers
         .map { it.size }
         .mapIndexed { index, numberOfCards -> (index + 1) to numberOfCards }
         .toMap()

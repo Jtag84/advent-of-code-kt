@@ -4,7 +4,6 @@ import cc.ekblad.konbini.parse
 import com.google.common.base.Stopwatch
 import kotlin.time.toKotlinDuration
 
-
 class Part<T>(val partNumber: Int, val inputParser: Parser<T>, val solvingFunction: (T) -> Any) {
     companion object {
         fun <T> part1(inputParser: Parser<T>, solvingFunction: (T) -> Any): Part<T> {

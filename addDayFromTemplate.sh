@@ -1,12 +1,13 @@
 #! /bin/zsh
+# ./addDayFromTemplate.sh 2023 1
 
-# ./addDayFromTemplate.sh
 YEAR=$1
 DAY=$(printf "%02d" "$2")
 
 KOTLIN_SRC_FOLDER="./src/main/kotlin/Year$YEAR/day$DAY"
 FILE_PART1="$KOTLIN_SRC_FOLDER/Part1.kt"
 FILE_PART2="$KOTLIN_SRC_FOLDER/Part2.kt"
+FILE_PARSER="$KOTLIN_SRC_FOLDER/Parser.kt"
 
 if [ -f "$FILE_PART1" ]; then
     echo "$FILE_PART1 already exists."
@@ -18,16 +19,24 @@ if [ -f "$FILE_PART2" ]; then
     exit 1
 fi
 
+if [ -f "$FILE_PARSER" ]; then
+    echo "$FILE_PARSER already exists."
+    exit 1
+fi
+
 PACKAGE_NAME="year$YEAR.day$DAY"
 
 mkdir -p "$KOTLIN_SRC_FOLDER"
-cp ./src/Part.kt.template "$FILE_PART1"
-cp ./src/Part.kt.template "$FILE_PART2"
+cp ./src/template/Part.kt "$FILE_PART1"
+cp ./src/template/Part.kt "$FILE_PART2"
+cp ./src/template/Parser.kt "$FILE_PARSER"
 
 gsed -i "s/<PACKAGE_NAME>/$PACKAGE_NAME/g" "$FILE_PART1"
 gsed -i "s/<PART_NUMBER>/1/g" "$FILE_PART1"
 gsed -i "s/<PACKAGE_NAME>/$PACKAGE_NAME/g" "$FILE_PART2"
 gsed -i "s/<PART_NUMBER>/2/g" "$FILE_PART2"
+gsed -i "s/<PACKAGE_NAME>/$PACKAGE_NAME/g" "$FILE_PARSER"
+gsed -i "s/<PART_NUMBER>/2/g" "$FILE_PARSER"
 
 INPUTS_FOLDER_PATH="./src/main/resources/Year$YEAR/day$DAY/"
 
