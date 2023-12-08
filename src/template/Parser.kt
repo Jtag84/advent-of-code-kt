@@ -1,6 +1,4 @@
-package <
-
-PACKAGE_NAME>
+package <PACKAGE_NAME>
 
 import cc.ekblad.konbini.*
 import Lines
