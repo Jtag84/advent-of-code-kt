@@ -7,8 +7,8 @@ fun main() {
     part2.run()
 }
 
-val part2 = part2 { inputs ->
-    inputs.lines()
+val part2 = part2 { lines ->
+    lines
         .filter { it.isNotBlank() }
         .sumOf {
             val leftDigit = getLeftSpelledOutOrPlainDigit(it)

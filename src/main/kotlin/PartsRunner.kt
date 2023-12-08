@@ -1,6 +1,4 @@
 import cc.ekblad.konbini.Parser
-import cc.ekblad.konbini.ParserResult
-import cc.ekblad.konbini.parse
 import com.google.common.base.Stopwatch
 import kotlin.time.toKotlinDuration
 
@@ -10,16 +8,16 @@ class Part<T>(val partNumber: Int, val inputParser: Parser<T>, val solvingFuncti
             return Part(1, inputParser, solvingFunction)
         }
 
-        fun part1(solvingFunction: (String) -> Any): Part<String> {
-            return Part(1, parseAll, solvingFunction)
+        fun part1(solvingFunction: (List<String>) -> Any): Part<List<String>> {
+            return Part(1, parseLines, solvingFunction)
         }
 
         fun <T> part2(inputParser: Parser<T>, solvingFunction: (T) -> Any): Part<T> {
             return Part(2, inputParser, solvingFunction)
         }
 
-        fun part2(solvingFunction: (String) -> Any): Part<String> {
-            return Part(2, parseAll, solvingFunction)
+        fun part2(solvingFunction: (List<String>) -> Any): Part<List<String>> {
+            return Part(2, parseLines, solvingFunction)
         }
 
     }
@@ -32,9 +30,15 @@ class Part<T>(val partNumber: Int, val inputParser: Parser<T>, val solvingFuncti
 
         check(result == expected) {
             """
-            Part $partNumber test: Failed in ${stopWatch.elapsed().toKotlinDuration()}
-            expected $expected but was $result
-        """.trimIndent()}
+        |
+        |Part $partNumber test: Failed in ${stopWatch.elapsed().toKotlinDuration()}
+        |expected:
+        |   $expected 
+        |but was:
+        |${result.toString().prependIndent()}
+        |
+        """.trimMargin()
+        }
 
         "Part $partNumber test: Succeeded in ${stopWatch.elapsed().toKotlinDuration()}".println()
     }
@@ -47,19 +51,11 @@ class Part<T>(val partNumber: Int, val inputParser: Parser<T>, val solvingFuncti
         val result = solvingFunction(parsedInputs)
         stopWatch.stop()
         """
-        Part $partNumber: $result 
-        Parsed in ${parsingTime.toKotlinDuration()} Completed in ${stopWatch.elapsed().toKotlinDuration()}
-    """.trimIndent().println()
+        |Part $partNumber: $result 
+        |Parsed in ${parsingTime.toKotlinDuration()} Completed in ${stopWatch.elapsed().toKotlinDuration()}
+        """.trimMargin().println()
     }
 
-}
-
-fun <T> Parser<T>.parseOrThrowException(input: String): T {
-    val parseResult = this.parse(input)
-    when (parseResult) {
-        is ParserResult.Ok -> return parseResult.result
-        else -> throw IllegalStateException(parseResult.toString())
-    }
 }
 
 /**

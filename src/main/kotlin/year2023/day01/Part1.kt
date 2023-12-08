@@ -7,8 +7,8 @@ fun main() {
     part1.run()
 }
 
-val part1 = part1 { inputs ->
-    inputs.lines()
+val part1 = part1 { lines ->
+    lines
         .filter(String::isNotBlank)
         .sumOf {
             val leftDigit = getFirstDigitFromTheLeft(it)

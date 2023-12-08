@@ -3,9 +3,9 @@ package <
 PACKAGE_NAME>
 
 import cc.ekblad.konbini.*
-import newLine
-import parseAll
+import Lines
+import parseLines
 
-val inputParser: Parser<String> = parser {
-    parseAll()
+val inputParser: Parser<Lines> = parser {
+    parseLines()
 }

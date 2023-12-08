@@ -10,5 +10,8 @@ fun main() {
 }
 
 val part<PART_NUMBER> = part<PART_NUMBER>(inputParser)
-{ input -> 1 }
+{
+    input ->
+    input
+}
 
