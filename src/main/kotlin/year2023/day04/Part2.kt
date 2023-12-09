@@ -4,11 +4,11 @@ import Part.Companion.part2
 import arrow.core.memoize
 
 fun main() {
-    part2.runTest(30)
+    part2.runTest()
     part2.run()
 }
 
-val part2 = part2(scratchcardsParser) { myWinningNumbers ->
+val part2 = part2(scratchcardsParser, 30) { myWinningNumbers ->
     val cards = myWinningNumbers
         .map { it.size }
         .mapIndexed { index, numberOfCards -> (index + 1) to numberOfCards }

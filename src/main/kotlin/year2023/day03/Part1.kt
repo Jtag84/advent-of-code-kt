@@ -5,11 +5,11 @@ import aroundWithDiagonals
 import arrow.core.partially1
 
 fun main() {
-    part1.runTest(4361L)
+    part1.runTest()
     part1.run()
 }
 
-val part1 = part1(schematicsItemParser) { schematicItems ->
+val part1 = part1(schematicsItemParser, 4361L) { schematicItems ->
     val symbols = schematicItems.filterIsInstance<SchematicItem.Symbol>().toSet()
     val partNumbers = schematicItems.filterIsInstance<SchematicItem.PartNumber>().toSet()
 

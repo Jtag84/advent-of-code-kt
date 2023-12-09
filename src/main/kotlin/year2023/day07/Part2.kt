@@ -4,11 +4,11 @@ import Part.Companion.part2
 import com.google.common.collect.Sets
 
 fun main() {
-    part2.runTest(5905L)
+    part2.runTest()
     part2.run()
 }
 
-val part2 = part2(inputParser) { handBidPairs ->
+val part2 = part2(inputParser, 5905L) { handBidPairs ->
     handBidPairs
         .map { it.generateBestHandFromJokers() }
         .calculateTotalWinnings()

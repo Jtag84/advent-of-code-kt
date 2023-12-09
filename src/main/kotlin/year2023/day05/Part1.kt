@@ -3,11 +3,11 @@ package year2023.day05
 import Part
 
 fun main() {
-    part1.runTest(35L)
+    part1.runTest()
     part1.run()
 }
 
-val part1 = Part.part1(almanacParser) { (seeds, maps) ->
+val part1 = Part.part1(almanacParser, 35L) { (seeds, maps) ->
     getLocations(seeds, maps).min()
 }
 

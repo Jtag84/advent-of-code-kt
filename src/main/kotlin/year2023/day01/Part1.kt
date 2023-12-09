@@ -3,11 +3,11 @@ package year2023.day01
 import Part.Companion.part1
 
 fun main() {
-    part1.runTest(142)
+    part1.runTest()
     part1.run()
 }
 
-val part1 = part1 { lines ->
+val part1 = part1(142) { lines ->
     lines
         .filter(String::isNotBlank)
         .sumOf {

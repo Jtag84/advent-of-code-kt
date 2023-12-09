@@ -7,11 +7,11 @@ import arrow.core.partially1
 import com.google.common.collect.Sets
 
 fun main() {
-    part2.runTest(467835L)
+    part2.runTest()
     part2.run()
 }
 
-val part2 = part2(schematicsItemParser) { schematicItems ->
+val part2 = part2(schematicsItemParser, 467835L) { schematicItems ->
     val gears = schematicItems.filterIsInstance<SchematicItem.Symbol>()
         .filter { it.symbol == '*' }.toSet()
     val gearCoordinates = gears.map(SchematicItem.Symbol::coordinates).toSet()

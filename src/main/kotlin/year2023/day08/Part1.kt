@@ -5,11 +5,11 @@ import foldUntil
 import repeat
 
 fun main() {
-    part1.runTest(2)
+    part1.runTest()
     part1.run()
 }
 
-val part1 = part1(inputParser) { (instructions, nodeMap) ->
+val part1 = part1(inputParser, 2) { (instructions, nodeMap) ->
     countToNextNodeEndingInZ(instructions, nodeMap, "AAA")
 }
 

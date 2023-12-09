@@ -3,11 +3,11 @@ package year2023.day06
 import Part.Companion.part1
 
 fun main() {
-    part1.runTest(288)
+    part1.runTest()
     part1.run()
 }
 
-val part1 = part1(raceParser) { racePairs ->
+val part1 = part1(raceParser, 288) { racePairs ->
     racePairs
         .map { (raceTime, recordDistance) ->
             calculateButtonHoldingDistanceOutcomes(raceTime).count { it > recordDistance }

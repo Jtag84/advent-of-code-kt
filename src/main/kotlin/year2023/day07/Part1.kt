@@ -3,11 +3,11 @@ package year2023.day07
 import Part.Companion.part1
 
 fun main() {
-    part1.runTest(6440L)
+    part1.runTest()
     part1.run()
 }
 
-val part1 = part1(inputParser) { handBidPairs ->
+val part1 = part1(inputParser, 6440L) { handBidPairs ->
     handBidPairs
         .calculateTotalWinnings()
 }

@@ -4,11 +4,11 @@ import Part.Companion.part1
 import kotlin.math.pow
 
 fun main() {
-    part1.runTest(13L)
+    part1.runTest()
     part1.run()
 }
 
-val part1 = part1(scratchcardsParser) { myWinningNumbers ->
+val part1 = part1(scratchcardsParser, 13L) { myWinningNumbers ->
     myWinningNumbers
         .map(::calculatePoints)
         .sum()
