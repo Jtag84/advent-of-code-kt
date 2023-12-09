@@ -9,6 +9,7 @@ import java.time.LocalDate
 import java.time.Month.DECEMBER
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.toKotlinDuration
 
 typealias PartNumber = Int
@@ -62,7 +63,7 @@ class Part<T>(
         }
     }
 
-    private suspend fun runPart(input: String): Tuple4<Any, Duration, Duration, Long> {
+    private fun runPart(input: String): Tuple4<Any, Duration, Duration, Long> {
         val runtime = Runtime.getRuntime()
 
         val parsingTimeWatch = Stopwatch.createStarted()
@@ -72,12 +73,14 @@ class Part<T>(
         return runBlocking(Dispatchers.Default) {
             var absoluteMaxMemoryUsages = 0L
             val monitoringJob = launch {
-                measureMemoryUsage(1L).collect {
+                measureMemoryUsage(1.milliseconds).collect {
                     if (it > absoluteMaxMemoryUsages) {
                         absoluteMaxMemoryUsages = it
                     }
                 }
             }
+
+            delay(10.milliseconds)
 
             val initialMemory = runtime.totalMemory() - runtime.freeMemory()
 
@@ -99,7 +102,7 @@ class Part<T>(
 
     fun runTest() {
         val testInputs = solvingFunction.javaClass.readTestInputsPart(partNumber)
-        val (result, parsingDuration, runningDuration, memory) = runBlocking { runPart(testInputs) }
+        val (result, parsingDuration, runningDuration, memory) = runPart(testInputs)
         val memoryDisplay = FileUtils.byteCountToDisplaySize(memory)
 
         check(result == expectedTestResult) {
@@ -108,6 +111,7 @@ class Part<T>(
             |Part $partNumber test: Failed 
             |Parsing duration: $parsingDuration
             |Running duration: $runningDuration
+            |Total duration:  ${parsingDuration + runningDuration}
             |Memory usage: $memoryDisplay
             |expected:
             |   $expectedTestResult 
@@ -121,13 +125,14 @@ class Part<T>(
             |Part $partNumber test: Succeeded 
             |Parsing duration: $parsingDuration
             |Running duration: $runningDuration
+            |Total duration:  ${parsingDuration + runningDuration}
             |Memory usage: $memoryDisplay
         """.trimMargin().println()
     }
 
     fun run() {
         val input = solvingFunction.javaClass.readInputs()
-        val (result, parsingDuration, runningDuration, memory) = runBlocking { runPart(input) }
+        val (result, parsingDuration, runningDuration, memory) = runPart(input)
         val memoryDisplay = FileUtils.byteCountToDisplaySize(memory)
 
         """
@@ -141,11 +146,11 @@ class Part<T>(
     }
 }
 
-suspend fun measureMemoryUsage(intervalMillis: Long): Flow<Long> = flow {
+suspend fun measureMemoryUsage(intervalDuration: Duration): Flow<Long> = flow {
     val runtime = Runtime.getRuntime()
     while (true) {
         emit(runtime.totalMemory() - runtime.freeMemory())
-        delay(intervalMillis)
+        delay(intervalDuration)
     }
 }
 
