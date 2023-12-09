@@ -29,3 +29,14 @@ fun <K, V> Map<K, V>.merge(otherMap: Map<K, V>, mergeValueFunction: (V, V) -> V)
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
     map { async { f(it) } }.awaitAll()
 }
+
+fun <T> Sequence<T>.repeat() = sequence { while (true) yieldAll(this@repeat) }
+
+inline fun <T, R> Sequence<T>.foldUntil(initial: R, condition: (R) -> Boolean, operation: (acc: R, T) -> R): R {
+    var accumulator = initial
+    for (element in this) {
+        accumulator = operation(accumulator, element)
+        if (condition(accumulator)) break
+    }
+    return accumulator
+}
