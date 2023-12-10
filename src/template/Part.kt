@@ -1,6 +1,6 @@
 package <PACKAGE_NAME>
 
-import Part.Companion.part<PART_NUMBER>
+import commons.Part.Companion.part<PART_NUMBER>
 
 fun main() {
     part<PART_NUMBER>.runTest()
