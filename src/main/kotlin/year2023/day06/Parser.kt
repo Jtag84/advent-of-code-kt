@@ -1,7 +1,7 @@
 package year2023.day06
 
 import cc.ekblad.konbini.*
-import newLine
+import commons.newLine
 
 typealias Time = Long
 typealias Record = Long

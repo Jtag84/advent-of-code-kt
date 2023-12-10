@@ -1,3 +1,5 @@
+package commons
+
 import arrow.core.Tuple4
 import cc.ekblad.konbini.Parser
 import com.google.common.base.Stopwatch
@@ -5,61 +7,33 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.apache.commons.io.FileUtils
-import java.time.LocalDate
-import java.time.Month.DECEMBER
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.toKotlinDuration
 
 typealias PartNumber = Int
-typealias DatePart = Pair<LocalDate, PartNumber>
 
 class Part<T>(
-    private val partNumber: PartNumber,
+    val partNumber: PartNumber,
     private val inputParser: Parser<T>,
     private val expectedTestResult: Any,
     val solvingFunction: (T) -> Any
 ) {
-
     companion object {
-        private val instances = ConcurrentHashMap<DatePart, Part<*>>()
-
-        fun getAllInstances() = instances
-
         fun <T : Any> part1(inputParser: Parser<T>, expectedTestResult: Any, solvingFunction: (T) -> Any): Part<T> {
-            return part(1, inputParser, expectedTestResult, solvingFunction)
+            return Part(1, inputParser, expectedTestResult, solvingFunction)
         }
 
         fun part1(expectedTestResult: Any, solvingFunction: (List<String>) -> Any): Part<List<String>> {
-            return part(1, parseLines, expectedTestResult, solvingFunction)
+            return Part(1, parseLines, expectedTestResult, solvingFunction)
         }
 
         fun <T : Any> part2(inputParser: Parser<T>, expectedTestResult: Any, solvingFunction: (T) -> Any): Part<T> {
-            return part(2, inputParser, expectedTestResult, solvingFunction)
+            return Part(2, inputParser, expectedTestResult, solvingFunction)
         }
 
         fun part2(expectedTestResult: Any, solvingFunction: (List<String>) -> Any): Part<List<String>> {
-            return part(2, parseLines, expectedTestResult, solvingFunction)
-        }
-
-        private fun <T : Any> part(
-            partNumber: PartNumber,
-            inputParser: Parser<T>,
-            expectedTestResult: Any,
-            solvingFunction: (T) -> Any
-        ): Part<T> {
-            val parsedYearAndDay =
-                Regex("year([0-9]{4}).day([0-3][0-9])").matchEntire(solvingFunction.javaClass.`package`.name)?.destructured!!
-            val year = parsedYearAndDay.component1().toInt()
-            val day = parsedYearAndDay.component2().toInt()
-            val datePart = Pair(LocalDate.of(year, DECEMBER, day), partNumber)
-
-            val part = Part(partNumber, inputParser, expectedTestResult, solvingFunction)
-
-            instances[datePart] = part
-
-            return part
+            return Part(2, parseLines, expectedTestResult, solvingFunction)
         }
     }
 

@@ -1,8 +1,8 @@
 package year2023.day03
 
-import Coordinates
 import cc.ekblad.konbini.*
-import right
+import commons.Coordinates
+import commons.right
 
 
 sealed class SchematicItem {

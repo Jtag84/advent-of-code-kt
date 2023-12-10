@@ -1,6 +1,6 @@
 package year2023.day06
 
-import Part.Companion.part1
+import commons.Part.Companion.part1
 
 fun main() {
     part1.runTest()

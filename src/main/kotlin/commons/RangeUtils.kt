@@ -1,3 +1,5 @@
+package commons
+
 fun LongRange.splitByIntersection(splitter: LongRange): Pair<LongRange?, List<LongRange>> {
     if (this.last < splitter.first || splitter.last < this.first) {
         return Pair(null, listOf(this))

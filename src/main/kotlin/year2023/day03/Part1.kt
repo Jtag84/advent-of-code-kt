@@ -1,8 +1,8 @@
 package year2023.day03
 
-import Part.Companion.part1
-import aroundWithDiagonals
 import arrow.core.partially1
+import commons.Part.Companion.part1
+import commons.aroundWithDiagonals
 
 fun main() {
     part1.runTest()

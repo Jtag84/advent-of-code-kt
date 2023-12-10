@@ -1,10 +1,10 @@
 package year2023.day03
 
-import Coordinates
-import Part.Companion.part2
-import aroundWithDiagonals
 import arrow.core.partially1
 import com.google.common.collect.Sets
+import commons.Coordinates
+import commons.Part.Companion.part2
+import commons.aroundWithDiagonals
 
 fun main() {
     part2.runTest()

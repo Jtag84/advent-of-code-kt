@@ -1,3 +1,5 @@
+package commons
+
 import cc.ekblad.konbini.*
 
 typealias Lines = List<String>
@@ -12,8 +14,7 @@ val parseLines: Parser<Lines> = parser {
 }
 
 fun <T> Parser<T>.parseOrThrowException(input: String): T {
-    val parseResult = this.parse(input)
-    when (parseResult) {
+    when (val parseResult = this.parse(input)) {
         is ParserResult.Ok -> return parseResult.result
         else -> throw IllegalStateException(parseResult.toString())
     }

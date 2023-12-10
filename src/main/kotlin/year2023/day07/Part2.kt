@@ -1,7 +1,7 @@
 package year2023.day07
 
-import Part.Companion.part2
 import com.google.common.collect.Sets
+import commons.Part.Companion.part2
 
 fun main() {
     part2.runTest()

@@ -1,6 +1,6 @@
 package year2023.day08
 
-import Part.Companion.part2
+import commons.Part.Companion.part2
 import org.apache.commons.math3.primes.Primes.primeFactors
 
 fun main() {

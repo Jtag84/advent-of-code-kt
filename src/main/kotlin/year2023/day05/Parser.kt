@@ -1,9 +1,9 @@
 package year2023.day05
 
 import cc.ekblad.konbini.*
-import newLine
-import newLines
-import splitByIntersection
+import commons.newLine
+import commons.newLines
+import commons.splitByIntersection
 
 data class AlmanacMap(val rangeToOffsets: List<Pair<LongRange, Long>>) {
     fun convert(value: Long): Long {

@@ -48,3 +48,5 @@ touch "$INPUTS_FOLDER_PATH/test_inputs_part2.txt"
 curl "https://adventofcode.com/$YEAR/day/$2/input" --cookie "session=$(cat ./cookieSession.txt)" > "$INPUTS_FOLDER_PATH/inputs.txt"
 curl -s "https://adventofcode.com/$YEAR/day/$2" --cookie "session=$(cat ./cookieSession.txt)"  | gsed -n '/<pre><code>/,/<\/code><\/pre>/p' | gsed -e 's/<pre><code>//g' -e 's/<\/code><\/pre>//g' > "$INPUTS_FOLDER_PATH/test_inputs_part1.txt"
 cp "$INPUTS_FOLDER_PATH/test_inputs_part1.txt" "$INPUTS_FOLDER_PATH/test_inputs_part2.txt"
+
+ ./regenerateAllPartsKt.sh

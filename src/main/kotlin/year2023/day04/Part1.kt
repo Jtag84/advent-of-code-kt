@@ -1,6 +1,6 @@
 package year2023.day04
 
-import Part.Companion.part1
+import commons.Part.Companion.part1
 import kotlin.math.pow
 
 fun main() {

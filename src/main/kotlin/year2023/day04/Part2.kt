@@ -1,7 +1,7 @@
 package year2023.day04
 
-import Part.Companion.part2
 import arrow.core.memoize
+import commons.Part.Companion.part2
 
 fun main() {
     part2.runTest()

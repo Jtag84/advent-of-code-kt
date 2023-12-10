@@ -1,8 +1,8 @@
 package year2023.day08
 
-import Part.Companion.part1
-import foldUntil
-import repeat
+import commons.Part.Companion.part1
+import commons.foldUntil
+import commons.repeat
 
 fun main() {
     part1.runTest()
