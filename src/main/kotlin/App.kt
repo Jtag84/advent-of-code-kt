@@ -10,9 +10,12 @@ fun main() {
         val day = parsedYearAndDay.component2().toInt()
 
         """
+            
             Running $year $day ${part.partNumber}:
         """.trimIndent()
             .println()
+
+        part.run()
     }
 }
 
