@@ -1,5 +1,5 @@
-import commons.Coordinates
-import commons.aroundWithDiagonals
+package commons
+
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

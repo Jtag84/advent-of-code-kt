@@ -42,3 +42,20 @@ inline fun <T, R> Sequence<T>.foldUntil(initial: R, condition: (R) -> Boolean, o
     }
     return accumulator
 }
+
+fun <T> List<T>.groupNextToSame(): List<List<T>> {
+    return this.fold(listOf(listOf())) { acc: List<List<T>>, nextElement: T ->
+        val lastGroup = acc.last()
+        when {
+            lastGroup.isEmpty() -> acc.dropLast(1) + listOf(listOf(nextElement))
+            lastGroup.last() != nextElement -> acc + listOf(listOf(nextElement))
+            else -> acc.dropLast(1) + listOf(lastGroup + listOf(nextElement))
+        }
+    }
+}
+
+fun <T> List<T>.sublists(): List<List<T>> {
+    return this.reversed().scan(emptyList()) { acc: List<T>, e ->
+        acc + e
+    }.reversed().map { it.reversed() }
+}
