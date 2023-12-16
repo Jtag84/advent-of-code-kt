@@ -59,3 +59,13 @@ fun <T> List<T>.sublists(): List<List<T>> {
         acc + e
     }.reversed().map { it.reversed() }
 }
+
+
+fun <T> List<List<T?>>.transpose(): List<List<T?>> {
+    if (this.isEmpty() || this.first().isEmpty()) return emptyList()
+
+    val transposeWidth = this.maxOf { it.size }
+    return (0 until transposeWidth).map { col ->
+        this.map { row -> row.getOrNull(col) }
+    }
+}
