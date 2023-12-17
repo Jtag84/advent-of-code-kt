@@ -4,21 +4,20 @@ import cc.ekblad.konbini.Parser
 import cc.ekblad.konbini.parser
 import commons.*
 import year2023.day10.Direction.*
-import year2023.day10.Tile.*
 
 val inputParser: Parser<Map<Coordinates, Tile>> = parser {
-    coordinatesParser(tileParser)().toMap()
+    coordinatesParser(enumParser<Tile>())().toMap()
 }
 
-enum class Tile(private val directionsMap: Map<Direction, Direction>) {
-    VERTICAL(mapOf(Pair(SOUTH, SOUTH), Pair(NORTH, NORTH))),
-    HORIZONTAL(mapOf(Pair(EAST, EAST), Pair(WEST, WEST))),
-    BEND_N_E(mapOf(Pair(SOUTH, EAST), Pair(WEST, NORTH))),
-    BEND_N_W(mapOf(Pair(SOUTH, WEST), Pair(EAST, NORTH))),
-    BEND_S_W(mapOf(Pair(EAST, SOUTH), Pair(NORTH, WEST))),
-    BEND_S_E(mapOf(Pair(NORTH, EAST), Pair(WEST, SOUTH))),
-    GROUND(emptyMap()),
-    START(emptyMap());
+enum class Tile(private val directionsMap: Map<Direction, Direction>, override val parsingString: String) : EnumParser {
+    VERTICAL(mapOf(Pair(SOUTH, SOUTH), Pair(NORTH, NORTH)), "|"),
+    HORIZONTAL(mapOf(Pair(EAST, EAST), Pair(WEST, WEST)), "-"),
+    BEND_N_E(mapOf(Pair(SOUTH, EAST), Pair(WEST, NORTH)), "L"),
+    BEND_N_W(mapOf(Pair(SOUTH, WEST), Pair(EAST, NORTH)), "J"),
+    BEND_S_W(mapOf(Pair(EAST, SOUTH), Pair(NORTH, WEST)), "7"),
+    BEND_S_E(mapOf(Pair(NORTH, EAST), Pair(WEST, SOUTH)), "F"),
+    GROUND(emptyMap(), "."),
+    START(emptyMap(), "S");
 
     fun nextDirection(currentDirection: Direction): Direction? {
         return directionsMap[currentDirection]
@@ -48,19 +47,5 @@ enum class Direction(val directionFunction: (Coordinates) -> Coordinates) {
 
     fun move(coordinates: Coordinates): Coordinates {
         return directionFunction(coordinates)
-    }
-}
-
-val tileParser = parser {
-    when (val tileChar = char()) {
-        '.' -> GROUND
-        '|' -> VERTICAL
-        '-' -> HORIZONTAL
-        'L' -> BEND_N_E
-        'J' -> BEND_N_W
-        '7' -> BEND_S_W
-        'F' -> BEND_S_E
-        'S' -> START
-        else -> throw IllegalStateException("Don't know $tileChar")
     }
 }

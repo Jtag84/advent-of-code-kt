@@ -1,21 +1,16 @@
 package year2023.day11
 
-import cc.ekblad.konbini.char
-import cc.ekblad.konbini.map
-import cc.ekblad.konbini.oneOf
 import cc.ekblad.konbini.parser
+import commons.EnumParser
 import commons.coordinatesParser
+import commons.enumParser
 
 val inputParser = parser {
-    coordinatesParser(spaceDataParser)().toMap()
+    coordinatesParser(enumParser<SpaceData>())().toMap()
 }
 
-val spaceDataParser = parser { oneOf(*SpaceData.entries.map { it.getParser() }.toTypedArray()) }
-
-enum class SpaceData(private val charData: Char) {
-    GALAXY('#'),
-    EMPTY_SPACE('.');
-
-    fun getParser() = parser { char(charData) }.map { this }
+enum class SpaceData(override val parsingString: String) : EnumParser {
+    GALAXY("#"),
+    EMPTY_SPACE(".");
 }
 

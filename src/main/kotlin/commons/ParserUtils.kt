@@ -9,6 +9,18 @@ val newLines = parser { many(newLine) }
 
 val parseText = parser { regex("[\\s\\S]*") }
 
+interface EnumParser {
+    val parsingString: String
+}
+
+inline fun <reified T> enumParser(): Parser<T> where T : Enum<T>, T : EnumParser {
+    return parser { oneOf(*enumValues<T>().map { it.enumValueParser() }.toTypedArray()) }
+}
+
+inline fun <reified T> T.enumValueParser(): Parser<T> where T : Enum<T>, T : EnumParser {
+    return parser { string(parsingString) }.map { this }
+}
+
 val parseLines: Parser<Lines> = parser {
     this.rest.lines()
 }

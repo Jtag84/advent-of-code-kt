@@ -1,21 +1,16 @@
 package year2023.day14
 
-import cc.ekblad.konbini.char
-import cc.ekblad.konbini.map
-import cc.ekblad.konbini.oneOf
 import cc.ekblad.konbini.parser
+import commons.EnumParser
 import commons.coordinatesParser
+import commons.enumParser
 
 val inputParser = parser {
-    coordinatesParser(rockParser)().toMap()
+    coordinatesParser(enumParser<Rock>())().toMap()
 }
 
-val rockParser = parser { oneOf(*Rock.entries.map { it.getParser() }.toTypedArray()) }
-
-enum class Rock(private val parsingChar: Char) {
-    ROUND_ROCK('O'),
-    CUBE_ROCK('#'),
-    EMPTY('.');
-
-    fun getParser() = parser { char(parsingChar) }.map { this }
+enum class Rock(override val parsingString: String) : EnumParser {
+    ROUND_ROCK("O"),
+    CUBE_ROCK("#"),
+    EMPTY(".");
 }

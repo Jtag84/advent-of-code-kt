@@ -2,24 +2,24 @@ package year2023.day07
 
 import arrow.core.identity
 import cc.ekblad.konbini.*
+import commons.EnumParser
+import commons.enumParser
 
-enum class Card(private val cardChar: Char) {
-    A('A'),
-    K('K'),
-    Q('Q'),
-    J('J'),
-    TEN('T'),
-    NINE('9'),
-    EIGHT('8'),
-    SEVEN('7'),
-    SIX('6'),
-    FIVE('5'),
-    FOUR('4'),
-    THREE('3'),
-    TWO('2'),
-    JOKER('x');
-
-    fun getParser() = parser { char(cardChar) }.map { this }
+enum class Card(override val parsingString: String) : EnumParser {
+    A("A"),
+    K("K"),
+    Q("Q"),
+    J("J"),
+    TEN("T"),
+    NINE("9"),
+    EIGHT("8"),
+    SEVEN("7"),
+    SIX("6"),
+    FIVE("5"),
+    FOUR("4"),
+    THREE("3"),
+    TWO("2"),
+    JOKER("x");
 }
 
 typealias Bid = Long
@@ -86,9 +86,7 @@ val inputParser: Parser<List<Pair<Hand, Bid>>> = parser {
     chain1(handBidParser, whitespace).terms
 }
 
-val cardParser = parser {
-    oneOf(*Card.entries.map(Card::getParser).toTypedArray())
-}
+val cardParser = enumParser<Card>()
 
 val handParser: Parser<Hand> = parser {
     Hand(listOf(cardParser(), cardParser(), cardParser(), cardParser(), cardParser()))

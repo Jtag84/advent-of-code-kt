@@ -4,7 +4,6 @@ import cc.ekblad.konbini.*
 import commons.Coordinates
 import commons.right
 
-
 sealed class SchematicItem {
     data class PartNumber(val number: Long, val coordinates: Coordinates) : SchematicItem()
     data class Symbol(val symbol: Char, val coordinates: Coordinates) : SchematicItem()

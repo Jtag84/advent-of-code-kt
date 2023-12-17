@@ -1,10 +1,12 @@
 package year2023.day08
 
 import cc.ekblad.konbini.*
+import commons.EnumParser
+import commons.enumParser
 
-enum class Instruction {
-    LEFT,
-    RIGHT;
+enum class Instruction(override val parsingString: String) : EnumParser {
+    LEFT("L"),
+    RIGHT("R");
 
     fun apply(pair: Pair<NodeName, NodeName>): NodeName {
         return when (this) {
@@ -26,17 +28,8 @@ val inputParser: Parser<Pair<Instructions, NodeMap>> = parser {
     Pair(instructions, nodeMap)
 }
 
-val instructionParser = parser {
-    val instruction = regex("[LR]")
-    when (instruction) {
-        "L" -> Instruction.LEFT
-        "R" -> Instruction.RIGHT
-        else -> throw IllegalStateException("Don't know $instruction")
-    }
-}
-
 val instructionsParser: Parser<Instructions> = parser {
-    many1(instructionParser)
+    many1(enumParser<Instruction>())
 }
 
 val nodeNameParser = parser { regex("[A-Z1-9]{3}") }

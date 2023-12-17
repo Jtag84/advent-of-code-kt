@@ -4,6 +4,22 @@ import kotlin.math.abs
 
 data class Coordinates (val x:Long, val y:Long)
 
+enum class Direction {
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT;
+
+    fun move(coordinates: Coordinates): Coordinates {
+        return when (this) {
+            UP -> coordinates.up()
+            DOWN -> coordinates.down()
+            RIGHT -> coordinates.right()
+            LEFT -> coordinates.left()
+        }
+    }
+}
+
 fun Coordinates.manhattanDistance(coordinates: Coordinates): Long {
     return abs(this.x - coordinates.x) + abs(this.y - coordinates.y)
 }

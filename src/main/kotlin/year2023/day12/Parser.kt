@@ -1,6 +1,8 @@
 package year2023.day12
 
 import cc.ekblad.konbini.*
+import commons.EnumParser
+import commons.enumParser
 
 typealias GroupSize = Int
 typealias GroupSizes = List<GroupSize>
@@ -12,19 +14,14 @@ val inputParser: Parser<List<Row>> = parser {
     chain1(rowParser, whitespace).terms
 }
 
-enum class SpringCondition(private val char: Char) {
-    OPERATIONAL('.'),
-    DAMAGED('#'),
-    UNKNOWN('?');
-
-    fun getParser() = parser { char(char) }.map { this }
+enum class SpringCondition(override val parsingString: String) : EnumParser {
+    OPERATIONAL("."),
+    DAMAGED("#"),
+    UNKNOWN("?");
 }
 
-val springConditionParser = parser {
-    oneOf(*SpringCondition.entries.map { it.getParser() }.toTypedArray())
-}
 val springConditionsParser = parser {
-    many1(springConditionParser)
+    many1(enumParser<SpringCondition>())
 }
 
 val groupSizesParser = parser {
