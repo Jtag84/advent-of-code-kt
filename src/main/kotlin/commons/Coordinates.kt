@@ -1,5 +1,6 @@
 package commons
 
+import commons.Direction.*
 import kotlin.math.abs
 
 data class Coordinates (val x:Long, val y:Long)
@@ -17,6 +18,16 @@ enum class Direction {
             RIGHT -> coordinates.right()
             LEFT -> coordinates.left()
         }
+    }
+}
+
+fun Coordinates.directionTo(coordinates: Coordinates): Direction? {
+    return when (coordinates) {
+        this.right() -> RIGHT
+        this.left() -> LEFT
+        this.up() -> UP
+        this.down() -> DOWN
+        else -> null
     }
 }
 
