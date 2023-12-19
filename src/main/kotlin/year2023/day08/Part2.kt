@@ -4,8 +4,8 @@ import commons.Part.Companion.part2
 import org.apache.commons.math3.primes.Primes.primeFactors
 
 fun main() {
-    part2.runTest()
-    part2.run()
+    part2.runAndPrintTest()
+    part2.runAndPrint()
 }
 
 val part2 = part2(inputParser, 6L) { (instructions, nodeMap) ->

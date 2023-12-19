@@ -16,7 +16,7 @@ typealias PartNumber = Int
 class Part<T>(
     val partNumber: PartNumber,
     private val inputParser: Parser<T>,
-    private val expectedTestResult: Any,
+    val expectedTestResult: Any,
     val solvingFunction: (T) -> Any
 ) {
     companion object {
@@ -74,9 +74,13 @@ class Part<T>(
         }
     }
 
-    fun runTest() {
+    fun runTest(): Tuple4<Any, Duration, Duration, Long> {
         val testInputs = solvingFunction.javaClass.readTestInputsPart(partNumber)
-        val (result, parsingDuration, runningDuration, memory) = runPart(testInputs)
+        return runPart(testInputs)
+    }
+
+    fun runAndPrintTest() {
+        val (result, parsingDuration, runningDuration, memory) = runTest()
         val memoryDisplay = FileUtils.byteCountToDisplaySize(memory)
 
         check(result == expectedTestResult) {
@@ -104,9 +108,14 @@ class Part<T>(
         """.trimMargin().println()
     }
 
-    fun run() {
+    fun run(): Tuple4<Any, Duration, Duration, Long> {
         val input = solvingFunction.javaClass.readInputs()
-        val (result, parsingDuration, runningDuration, memory) = runPart(input)
+        return runPart(input)
+    }
+
+    fun runAndPrint() {
+        val (result, parsingDuration, runningDuration, memory) = run()
+
         val memoryDisplay = FileUtils.byteCountToDisplaySize(memory)
 
         """

@@ -4,8 +4,8 @@ import commons.Part.Companion.part1
 import kotlin.math.pow
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = part1(scratchcardsParser, 13L) { myWinningNumbers ->

@@ -6,8 +6,8 @@ import commons.Part.Companion.part2
 import year2023.day10.Tile.*
 
 fun main() {
-    part2.runTest()
-    part2.run()
+    part2.runAndPrintTest()
+    part2.runAndPrint()
 }
 
 val part2 = part2(inputParser, 4) { pipeMap ->

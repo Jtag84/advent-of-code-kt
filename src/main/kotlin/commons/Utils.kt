@@ -6,6 +6,11 @@ import kotlinx.coroutines.coroutineScope
 import java.math.BigInteger
 import java.security.MessageDigest
 
+const val RED_FOREGROUND = "\u001b[31m"
+const val YELLOW_FOREGROUND = "\u001b[33m"
+const val GREEN_FOREGROUND = "\u001b[32m"
+const val RESET_COLORS = "\u001b[0m"
+
 /**
  * Converts string to md5 hash.
  */
@@ -17,6 +22,10 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  * The cleaner shorthand for printing output.
  */
 fun Any?.println() = println(this)
+
+fun Any?.toRedString() = "$RED_FOREGROUND$this$RESET_COLORS"
+fun Any?.toYellowString() = "$YELLOW_FOREGROUND$this$RESET_COLORS"
+fun Any?.toGreenString() = "$GREEN_FOREGROUND$this$RESET_COLORS"
 
 fun <K> Map<K, Int>.mergeAndSumValues(otherMap: Map<K, Int>): Map<K, Int> {
     return this.merge(otherMap, Int::plus)

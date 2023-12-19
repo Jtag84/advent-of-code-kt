@@ -6,8 +6,8 @@ import commons.search.AStar
 import commons.search.Node
 
 fun main() {
-    part2.runTest()
-    part2.run() // takes over 15s min and 1GB
+    part2.runAndPrintTest()
+    part2.runAndPrint()
 }
 
 val part2 = part2(inputParser, 71) { heatLossMap ->

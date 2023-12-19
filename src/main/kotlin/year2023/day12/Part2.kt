@@ -5,8 +5,8 @@ import commons.repeat
 import year2023.day12.SpringCondition.UNKNOWN
 
 fun main() {
-    part2.runTest()
-    part2.run()
+    part2.runAndPrintTest()
+    part2.runAndPrint()
 }
 
 val part2 = part2(inputParser, 525152L) { rows ->

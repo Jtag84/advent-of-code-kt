@@ -4,8 +4,8 @@ import commons.Coordinates
 import commons.Part.Companion.part1
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = part1(inputParser, 62L) { digDirections ->

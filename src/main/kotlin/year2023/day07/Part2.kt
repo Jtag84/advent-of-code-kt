@@ -4,8 +4,8 @@ import com.google.common.collect.Sets
 import commons.Part.Companion.part2
 
 fun main() {
-    part2.runTest()
-    part2.run()
+    part2.runAndPrintTest()
+    part2.runAndPrint()
 }
 
 val part2 = part2(inputParser, 5905L) { handBidPairs ->
@@ -30,10 +30,10 @@ fun Pair<Hand, Bid>.generateBestHandFromJokers(): Pair<Hand, Bid> {
     val jokerIndexToReplacements = allPossibleJokerCombinations.map { jokerIndices.zip(it) }
 
     val bestHand = jokerIndexToReplacements.map { replacements ->
-        cards.withIndex().map { card ->
-            replacements.find { it.first == card.index }
+        cards.mapIndexed { index, card ->
+            replacements.find { it.first == index }
                 ?.second
-                ?: card.value
+                ?: card
         }
     }
         .minOf { Hand(it, jokerIndices) }

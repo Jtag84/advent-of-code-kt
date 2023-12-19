@@ -8,8 +8,8 @@ import year2023.day11.SpaceData.EMPTY_SPACE
 import year2023.day11.SpaceData.GALAXY
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = part1(inputParser, 374L) { galaxyMap ->

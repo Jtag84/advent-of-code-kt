@@ -6,8 +6,8 @@ import year2023.day10.Direction.*
 import kotlin.math.roundToInt
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = part1(inputParser, 4) { pipeMap ->

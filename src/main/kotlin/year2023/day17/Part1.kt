@@ -7,8 +7,8 @@ import commons.search.AStar
 import commons.search.Node
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = part1(inputParser, 102) { heatLossMap ->

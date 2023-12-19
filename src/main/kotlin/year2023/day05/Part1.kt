@@ -3,8 +3,8 @@ package year2023.day05
 import commons.Part
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = Part.part1(almanacParser, 35L) { (seeds, maps) ->

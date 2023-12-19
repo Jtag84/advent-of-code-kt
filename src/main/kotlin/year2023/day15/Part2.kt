@@ -3,8 +3,8 @@ package year2023.day15
 import commons.Part.Companion.part2
 
 fun main() {
-    part2.runTest()
-    part2.run()
+    part2.runAndPrintTest()
+    part2.runAndPrint()
 }
 
 val part2 = part2(stepsParser, 145) { input ->

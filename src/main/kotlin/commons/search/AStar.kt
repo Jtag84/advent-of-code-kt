@@ -51,7 +51,7 @@ object AStar {
                 // This path is the best until now. Record it!
                 cameFrom[neighbor] = current
                 gScore[neighbor] = tentativeGScore
-                neighbor.withFScore((gScore[neighbor] ?: 0) + heuristic(neighbor))
+                neighbor.withFScore(tentativeGScore + heuristic(neighbor))
 
                 // Discover a new node
                 openSet.add(neighbor)

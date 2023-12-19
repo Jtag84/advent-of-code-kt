@@ -5,8 +5,8 @@ import commons.Part.Companion.part1
 import year2023.day12.SpringCondition.*
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = part1(inputParser, 21L) { rows ->

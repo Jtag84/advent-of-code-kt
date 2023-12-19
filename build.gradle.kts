@@ -24,6 +24,7 @@ dependencies {
 
 application {
     mainClass.set("AppKt")
+    application.applicationName = "aoc-kt"
 }
 
 tasks.test {

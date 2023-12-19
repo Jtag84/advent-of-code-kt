@@ -5,8 +5,8 @@ import commons.Part.Companion.part1
 import commons.aroundWithDiagonals
 
 fun main() {
-    part1.runTest()
-    part1.run()
+    part1.runAndPrintTest()
+    part1.runAndPrint()
 }
 
 val part1 = part1(schematicsItemParser, 4361L) { schematicItems ->
