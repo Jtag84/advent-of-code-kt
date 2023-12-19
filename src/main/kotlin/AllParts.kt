@@ -33,4 +33,6 @@ val allParts = listOf(
     year2023.day16.part2,
     year2023.day17.part1,
     year2023.day17.part2,
+    year2023.day18.part1,
+    year2023.day18.part2,
 )

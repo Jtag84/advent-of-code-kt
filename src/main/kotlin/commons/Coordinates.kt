@@ -11,12 +11,12 @@ enum class Direction {
     RIGHT,
     LEFT;
 
-    fun move(coordinates: Coordinates): Coordinates {
+    fun move(coordinates: Coordinates, n: Long = 1): Coordinates {
         return when (this) {
-            UP -> coordinates.up()
-            DOWN -> coordinates.down()
-            RIGHT -> coordinates.right()
-            LEFT -> coordinates.left()
+            UP -> coordinates.up(n)
+            DOWN -> coordinates.down(n)
+            RIGHT -> coordinates.right(n)
+            LEFT -> coordinates.left(n)
         }
     }
 
@@ -65,7 +65,7 @@ fun Coordinates.down(n: Long = 1): Coordinates {
     return Coordinates(x, y + n)
 }
 
-fun Coordinates.left(n: Int = 1): Coordinates {
+fun Coordinates.left(n: Long = 1): Coordinates {
     return Coordinates(x - n, y)
 }
 
