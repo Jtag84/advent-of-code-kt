@@ -3,7 +3,7 @@ package commons.search
 import java.util.*
 
 object AStar {
-    fun <T : Node<T>> search(start: T, goal: T): Pair<Int, List<T>> {
+    fun <T : Node<T>> search(start: T, heuristic: (T) -> Int, isGoal: (T) -> Boolean): Pair<Int, List<T>> {
         // Set of nodes already evaluated
         val closedSet: MutableSet<T> = HashSet()
 
@@ -23,25 +23,25 @@ object AStar {
 
         // For each node, the total cost of getting from the start node to the goal
         // by passing by that node. That value is partly known, partly heuristic.
-        start.withFScore(start.distanceTo(goal, cameFrom))
+        start.withFScore(heuristic(start))
 
         while (openSet.isNotEmpty()) {
             val current: T = openSet.poll()
 
-            if (current == goal) {
+            if (isGoal(current)) {
                 return Pair(gScore[current] ?: 0, reconstructPath(cameFrom, current))
             }
 
             closedSet.add(current)
 
-            for (neighbor in current.getNeighbors(cameFrom)) {
+            for (neighbor in current.getNeighbors()) {
                 if (closedSet.contains(neighbor)) {
                     // Ignore the neighbor which is already evaluated.
                     continue
                 }
 
                 // The distance from start to a neighbor
-                val tentativeGScore: Int = (gScore[current] ?: 0) + current.distanceTo(neighbor, cameFrom)
+                val tentativeGScore: Int = (gScore[current] ?: 0) + current.distanceTo(neighbor)
 
                 if (tentativeGScore >= gScore.getOrDefault(neighbor, Int.MAX_VALUE)) {
                     // This is not a better path.
@@ -51,9 +51,8 @@ object AStar {
                 // This path is the best until now. Record it!
                 cameFrom[neighbor] = current
                 gScore[neighbor] = tentativeGScore
-                neighbor.withFScore((gScore[neighbor] ?: 0) + neighbor.distanceTo(goal, cameFrom))
+                neighbor.withFScore((gScore[neighbor] ?: 0) + heuristic(neighbor))
 
-                openSet.remove(neighbor)
                 // Discover a new node
                 openSet.add(neighbor)
             }

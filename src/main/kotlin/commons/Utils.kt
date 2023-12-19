@@ -44,13 +44,45 @@ inline fun <T, R> Sequence<T>.foldUntil(initial: R, condition: (R) -> Boolean, o
 }
 
 fun <T> List<T>.groupNextToSame(): List<List<T>> {
-    return this.fold(listOf(listOf())) { acc: List<List<T>>, nextElement: T ->
-        val lastGroup = acc.last()
-        when {
-            lastGroup.isEmpty() -> acc.dropLast(1) + listOf(listOf(nextElement))
-            lastGroup.last() != nextElement -> acc + listOf(listOf(nextElement))
-            else -> acc.dropLast(1) + listOf(lastGroup + listOf(nextElement))
+    if (this.isEmpty()) return listOf()
+
+    val result = mutableListOf<List<T>>()
+    var currentGroup = mutableListOf(this.first())
+
+    for (i in 1 until this.size) {
+        if (this[i] == this[i - 1]) {
+            currentGroup.add(this[i])
+        } else {
+            result.add(currentGroup)
+            currentGroup = mutableListOf(this[i])
         }
+    }
+    result.add(currentGroup)
+
+    return result
+}
+
+fun <T> Sequence<T>.groupNextToSame(): Sequence<List<T>> {
+    return sequence {
+        val iterator = this@groupNextToSame.iterator()
+
+        if (!iterator.hasNext()) return@sequence
+
+        var currentElement = iterator.next()
+        var currentGroup = mutableListOf(currentElement)
+
+        while (iterator.hasNext()) {
+            val nextElement = iterator.next()
+            if (nextElement == currentElement) {
+                currentGroup.add(nextElement)
+            } else {
+                yield(currentGroup)
+                currentElement = nextElement
+                currentGroup = mutableListOf(currentElement)
+            }
+        }
+
+        yield(currentGroup)
     }
 }
 

@@ -19,6 +19,15 @@ enum class Direction {
             LEFT -> coordinates.left()
         }
     }
+
+    fun opposite(): Direction {
+        return when (this) {
+            UP -> DOWN
+            DOWN -> UP
+            RIGHT -> LEFT
+            LEFT -> RIGHT
+        }
+    }
 }
 
 fun Coordinates.directionTo(coordinates: Coordinates): Direction? {
@@ -48,21 +57,19 @@ fun Coordinates.aroundWithDiagonals(): Set<Coordinates> {
     )
 }
 
-fun Coordinates.up() = up(1)
-fun Coordinates.up(n: Long): Coordinates {
+fun Coordinates.up(n: Long = 1): Coordinates {
     return Coordinates(x, y - n)
 }
 
-fun Coordinates.down() = down(1)
-
-fun Coordinates.down(n: Long): Coordinates {
+fun Coordinates.down(n: Long = 1): Coordinates {
     return Coordinates(x, y + n)
 }
-fun Coordinates.left(): Coordinates {
-    return Coordinates(x-1, y)
+
+fun Coordinates.left(n: Int = 1): Coordinates {
+    return Coordinates(x - n, y)
 }
-fun Coordinates.right() = right(1)
-fun Coordinates.right(n: Long): Coordinates {
+
+fun Coordinates.right(n: Long = 1): Coordinates {
     return Coordinates(x + n, y)
 }
 
