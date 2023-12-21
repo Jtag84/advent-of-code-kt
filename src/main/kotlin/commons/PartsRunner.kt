@@ -6,7 +6,6 @@ import com.google.common.base.Stopwatch
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.apache.commons.io.FileUtils
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.toKotlinDuration
@@ -81,16 +80,15 @@ class Part<T>(
 
     fun runAndPrintTest() {
         val (result, parsingDuration, runningDuration, memory) = runTest()
-        val memoryDisplay = FileUtils.byteCountToDisplaySize(memory)
 
         check(result == expectedTestResult) {
             """
             |
-            |Part $partNumber test: Failed 
+            |Part $partNumber test: ${"Failed".toRedString()} 
             |Parsing duration: $parsingDuration
             |Running duration: $runningDuration
             |Total duration:  ${parsingDuration + runningDuration}
-            |Memory usage: $memoryDisplay
+            |Memory usage: ${memory.toColorizedReadableMemorySize()}
             |expected:
             |   $expectedTestResult 
             |but was:
@@ -100,11 +98,11 @@ class Part<T>(
         }
         """
             |
-            |Part $partNumber test: Succeeded 
-            |Parsing duration: $parsingDuration
-            |Running duration: $runningDuration
-            |Total duration:  ${parsingDuration + runningDuration}
-            |Memory usage: $memoryDisplay
+            |Part $partNumber test: ${"Succeeded".toGreenString()} 
+            |Parsing duration: ${parsingDuration.toColorizedString()}
+            |Running duration: ${runningDuration.toColorizedString()}
+            |Total duration:  ${(parsingDuration + runningDuration).toColorizedString()}
+            |Memory usage: ${memory.toColorizedReadableMemorySize()}
         """.trimMargin().println()
     }
 
@@ -116,15 +114,13 @@ class Part<T>(
     fun runAndPrint() {
         val (result, parsingDuration, runningDuration, memory) = run()
 
-        val memoryDisplay = FileUtils.byteCountToDisplaySize(memory)
-
         """
             |
-            |Part $partNumber: $result
-            |Parsing duration: $parsingDuration
-            |Running duration: $runningDuration
-            |Total duration:  ${parsingDuration + runningDuration}
-            |Memory usage: $memoryDisplay
+            |Part $partNumber: ${result.toGreenString()}
+            |Parsing duration: ${parsingDuration.toColorizedString()}
+            |Running duration: ${runningDuration.toColorizedString()}
+            |Total duration:  ${(parsingDuration + runningDuration).toColorizedString()}
+            |Memory usage: ${memory.toColorizedReadableMemorySize()}
         """.trimMargin().println()
     }
 }

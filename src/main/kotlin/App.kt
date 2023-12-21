@@ -1,8 +1,5 @@
 import Headers.*
 import commons.*
-import org.apache.commons.io.FileUtils
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 enum class Headers(val label: String) {
     DAY(" Day "),
@@ -65,29 +62,12 @@ private fun toRow(part: Part<out Any>, day: Day): Map<Headers, String> {
         PART to "${part.partNumber}",
         TEST_RESULT to ((testResult == part.expectedTestResult).takeIf { it }?.let { "Passed".toGreenString() }
             ?: "Failed".toRedString()),
-        TEST_RUNTIME to getColorizedDuration(testRunningDuration),
-        TEST_MEMORY to getColorizedReadableMemory(testMemory),
+        TEST_RUNTIME to testRunningDuration.toColorizedString(),
+        TEST_MEMORY to testMemory.toColorizedReadableMemorySize(),
         PARSING_TIME to parsingDuration.toString(),
-        RUNTIME to getColorizedDuration(runningDuration),
-        MEMORY to getColorizedReadableMemory(memory)
+        RUNTIME to runningDuration.toColorizedString(),
+        MEMORY to memory.toColorizedReadableMemorySize()
     )
-}
-
-private fun getColorizedReadableMemory(memory: Long): String {
-    val readableMemory = FileUtils.byteCountToDisplaySize(memory)
-    return when {
-        memory > 200_000_000 -> readableMemory.toRedString()
-        memory > 50_000_000 -> readableMemory.toYellowString()
-        else -> readableMemory.toGreenString()
-    }
-}
-
-private fun getColorizedDuration(duration: kotlin.time.Duration): String {
-    return when {
-        duration > 1.seconds -> duration.toRedString()
-        duration > 500.milliseconds -> duration.toYellowString()
-        else -> duration.toGreenString()
-    }
 }
 
 fun printUsage() {

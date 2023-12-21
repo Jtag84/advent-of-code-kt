@@ -3,8 +3,11 @@ package commons
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import org.apache.commons.io.FileUtils
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 const val RED_FOREGROUND = "\u001b[31m"
 const val YELLOW_FOREGROUND = "\u001b[33m"
@@ -101,12 +104,28 @@ fun <T> List<T>.sublists(): List<List<T>> {
     }.reversed().map { it.reversed() }
 }
 
-
 fun <T> List<List<T?>>.transpose(): List<List<T?>> {
     if (this.isEmpty() || this.first().isEmpty()) return emptyList()
 
     val transposeWidth = this.maxOf { it.size }
     return (0 until transposeWidth).map { col ->
         this.map { row -> row.getOrNull(col) }
+    }
+}
+
+fun kotlin.time.Duration.toColorizedString(): String {
+    return when {
+        this > 1.seconds -> this.toRedString()
+        this > 500.milliseconds -> this.toYellowString()
+        else -> this.toGreenString()
+    }
+}
+
+fun Long.toColorizedReadableMemorySize(): String {
+    val readableMemory = FileUtils.byteCountToDisplaySize(this)
+    return when {
+        this > 200_000_000 -> readableMemory.toRedString()
+        this > 50_000_000 -> readableMemory.toYellowString()
+        else -> readableMemory.toGreenString()
     }
 }
