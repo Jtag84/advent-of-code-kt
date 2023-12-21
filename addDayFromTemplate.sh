@@ -4,7 +4,7 @@
 YEAR=$1
 DAY=$(printf "%02d" "$2")
 
-KOTLIN_SRC_FOLDER="./src/main/kotlin/Year$YEAR/day$DAY"
+KOTLIN_SRC_FOLDER="./src/main/kotlin/year$YEAR/day$DAY"
 FILE_PART1="$KOTLIN_SRC_FOLDER/Part1.kt"
 FILE_PART2="$KOTLIN_SRC_FOLDER/Part2.kt"
 FILE_PARSER="$KOTLIN_SRC_FOLDER/Parser.kt"
@@ -38,7 +38,7 @@ gsed -i "s/<PART_NUMBER>/2/g" "$FILE_PART2"
 gsed -i "s/<PACKAGE_NAME>/$PACKAGE_NAME/g" "$FILE_PARSER"
 gsed -i "s/<PART_NUMBER>/2/g" "$FILE_PARSER"
 
-INPUTS_FOLDER_PATH="./src/main/resources/Year$YEAR/day$DAY/"
+INPUTS_FOLDER_PATH="./src/main/resources/year$YEAR/day$DAY/"
 
 mkdir -p "$INPUTS_FOLDER_PATH"
 touch "$INPUTS_FOLDER_PATH/inputs.txt"

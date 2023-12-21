@@ -28,6 +28,7 @@ typealias Day = Int
 
 fun printYear(year: Int, parts: List<Triple<Year, Day, Part<out Any>>>) {
     """
+        
     Year $year:
     
     ${Headers.entries.joinToString("|") { it.label }}
@@ -54,20 +55,23 @@ private fun printRow(row: Map<Headers, String>) {
 }
 
 private fun toRow(part: Part<out Any>, day: Day): Map<Headers, String> {
-    val (testResult, testParsingDuration, testRunningDuration, testMemory) = part.runTest()
+    val testData = part.runTest()?.let { (testResult, testParsingDuration, testRunningDuration, testMemory) ->
+        listOf(
+            TEST_RESULT to ((testResult == part.expectedTestResult).takeIf { it }?.let { "Passed".toGreenString() }
+                ?: "Failed".toRedString()),
+            TEST_RUNTIME to testRunningDuration.toColorizedString(),
+            TEST_MEMORY to testMemory.toColorizedReadableMemorySize(),
+        )
+    }
     val (result, parsingDuration, runningDuration, memory) = part.run()
 
-    return mapOf(
+    return (listOf(
         DAY to "%02d".format(day),
         PART to "${part.partNumber}",
-        TEST_RESULT to ((testResult == part.expectedTestResult).takeIf { it }?.let { "Passed".toGreenString() }
-            ?: "Failed".toRedString()),
-        TEST_RUNTIME to testRunningDuration.toColorizedString(),
-        TEST_MEMORY to testMemory.toColorizedReadableMemorySize(),
         PARSING_TIME to parsingDuration.toString(),
         RUNTIME to runningDuration.toColorizedString(),
         MEMORY to memory.toColorizedReadableMemorySize()
-    )
+    ) + (testData ?: emptyList())).toMap()
 }
 
 fun printUsage() {
