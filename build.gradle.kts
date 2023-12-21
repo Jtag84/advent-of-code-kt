@@ -20,6 +20,7 @@ dependencies {
     implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("commons-io:commons-io:2.15.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
+    implementation("guru.nidi:graphviz-kotlin:0.18.0")
 }
 
 application {

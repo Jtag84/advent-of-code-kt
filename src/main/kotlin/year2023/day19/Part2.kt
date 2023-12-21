@@ -8,7 +8,7 @@ fun main() {
     part2.runAndPrint()
 }
 
-val part2 = part2(inputPart2Parser, 167409079868000L) { workflows ->
+val part2 = part2(inputPart2Parser, 167_409_079_868_000L) { workflows ->
     val initialRule = workflows["in"]!!
     val fullRange = 1..4000L
     getRatingRange(
