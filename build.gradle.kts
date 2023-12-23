@@ -15,12 +15,13 @@ dependencies {
     testImplementation(kotlin("test"))
 
     implementation("cc.ekblad.konbini:konbini:0.1.3")
+    implementation("com.breinify:brein-time-utilities:1.8.0")
     implementation("com.google.guava:guava:32.1.3-jre")
+    implementation("commons-io:commons-io:2.15.1")
+    implementation("guru.nidi:graphviz-kotlin:0.18.0")
     implementation("io.arrow-kt:arrow-core:1.2.1")
     implementation("org.apache.commons:commons-math3:3.6.1")
-    implementation("commons-io:commons-io:2.15.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
-    implementation("guru.nidi:graphviz-kotlin:0.18.0")
 }
 
 application {

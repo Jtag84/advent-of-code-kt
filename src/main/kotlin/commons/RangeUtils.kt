@@ -18,3 +18,13 @@ fun LongRange.splitByIntersection(splitter: LongRange): Pair<LongRange?, List<Lo
 
     return Pair(intersection, remainingRanges.toList())
 }
+
+fun LongRange.shift(n: Long): LongRange {
+    return LongRange(this.first + n, this.last + n)
+}
+
+fun LongRange.overlap(longRange: LongRange): Boolean {
+    return this.contains(longRange.first) || this.contains(longRange.last) || longRange.contains(this.first) || longRange.contains(
+        this.last
+    )
+}
