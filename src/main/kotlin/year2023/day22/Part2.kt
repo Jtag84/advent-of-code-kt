@@ -17,6 +17,14 @@ val part2 = part2(inputParser, 7) { bricks ->
         }
 }
 
+fun getFallenBricks(bricks: Set<Brick>): Set<Brick> {
+    val xyRangesByZ = TreeMap<Long, Set<XYRange>>()
+    return bricks.sortedBy { it.third.first }
+        .fold(emptySet()) { fallenBricks, fallingBrick ->
+            fallenBricks + fallingBrick(xyRangesByZ, fallingBrick)
+        }
+}
+
 fun countFallenBricks(bricks: Set<Brick>): Int {
     val xyRangesByZ = TreeMap<Long, Set<XYRange>>()
     return bricks.sortedBy { it.third.first }

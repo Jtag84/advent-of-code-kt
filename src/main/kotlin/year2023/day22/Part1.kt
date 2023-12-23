@@ -11,11 +11,36 @@ fun main() {
 }
 
 val part1 = part1(inputParser, 5) { bricks ->
-    val fallenBricks = getFallenBricks(bricks)
-    fallenBricks
-        .count {
-            val withoutIt = fallenBricks - it
-            willAnyBrickFall(withoutIt).not()
+    // less efficient solution
+//    val fallenBricks = getFallenBricks(bricks)
+//    fallenBricks
+//        .count {
+//            val withoutIt = fallenBricks - it
+//            willAnyBrickFall(withoutIt).not()
+//        }
+
+    getFallenBricksWithSupportingData(bricks)
+        .count { fallenBrick ->
+            fallenBrick.supportingBricks.isEmpty()
+                    || fallenBrick.supportingBricks.all { it.supportedBy.count() > 1 }
+        }
+}
+
+fun getFallenBricksWithSupportingData(bricks: Set<Brick>): Set<BrickNode> {
+    val xyRangesByZ = TreeMap<Long, Set<XYRange>>()
+    return bricks.sortedBy { it.third.first }
+        .fold(emptySet()) { fallenBricks, fallingBrick ->
+            val (fallenXRange, fallenYRange, fallenZRange) = fallingBrick(xyRangesByZ, fallingBrick)
+            val fallenBrick = BrickNode(fallenXRange, fallenYRange, fallenZRange, mutableSetOf(), mutableSetOf())
+            fallenBricks
+                .filter { it.zRange.last == (fallenZRange.first - 1) }
+                .filter { it.xRange.overlap(fallenXRange) && it.yRange.overlap(fallenYRange) }
+                .forEach {
+                    it.supportingBricks.add(fallenBrick)
+                    fallenBrick.supportedBy.add(it)
+                }
+
+            fallenBricks + fallenBrick
         }
 }
 
@@ -26,14 +51,6 @@ fun willAnyBrickFall(bricks: Set<Brick>): Boolean {
 }
 
 typealias XYRange = Pair<XRange, YRange>
-
-fun getFallenBricks(bricks: Set<Brick>): Set<Brick> {
-    val xyRangesByZ = TreeMap<Long, Set<XYRange>>()
-    return bricks.sortedBy { it.third.first }
-        .fold(emptySet<Brick>()) { fallenBricks, fallingBrick ->
-            fallenBricks + fallingBrick(xyRangesByZ, fallingBrick)
-        }
-}
 
 fun fallingBrick(xyRangesByZ: TreeMap<Long, Set<XYRange>>, brick: Brick): Brick {
     val (xRange, yRange, zRange) = brick
