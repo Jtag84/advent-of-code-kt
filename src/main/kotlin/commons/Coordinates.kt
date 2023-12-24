@@ -30,6 +30,10 @@ enum class Direction {
     }
 }
 
+fun Coordinates.cardinals(): Collection<Coordinates> {
+    return listOf(north(), east(), south(), west())
+}
+
 fun Coordinates.directionTo(coordinates: Coordinates): Direction? {
     return when (coordinates) {
         this.right() -> RIGHT
