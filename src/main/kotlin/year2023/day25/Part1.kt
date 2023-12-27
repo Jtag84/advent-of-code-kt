@@ -9,7 +9,7 @@ fun main() {
     part1.runAndPrint()
 }
 
-private const val SAMPLE_PATHS = 3000 // increase that number if no solution is found
+private const val SAMPLE_PATHS = 2_000 // increase that number if no solution is found
 private const val NUMBER_OF_WIRES_TO_CUT = 3
 
 val part1 = part1(inputParser, 54) { graph ->
@@ -22,7 +22,7 @@ val part1 = part1(inputParser, 54) { graph ->
         .asSequence().repeat()
         .take(SAMPLE_PATHS)
         .map { buildPath(graph.toMutableMap(), listOf(it.first), it.second)}
-        .filter { it.size >= graph.keys.size / 4 } // only keep long paths
+        .filter { it.size >= graph.keys.size / 4 } // only keep long paths (greatest performance improvement)
         .flatMap { it.zipWithNext() }
         .groupBy { minOf(it.first, it.second) to maxOf(it.first, it.second) }
         .mapValues { it.value.size }

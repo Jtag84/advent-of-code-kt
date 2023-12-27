@@ -1,5 +1,6 @@
 import Headers.*
 import commons.*
+import kotlin.time.Duration
 
 enum class Headers(val label: String) {
     DAY(" Day "),
@@ -34,44 +35,74 @@ fun printYear(year: Int, parts: List<Triple<Year, Day, Part<out Any>>>) {
     ${Headers.entries.joinToString("|") { it.label }}
     """.trimIndent().println()
 
-    parts
+    val totalRow = parts
         .sortedWith(
             compareBy<Triple<Int, Int, Part<out Any>>> { it.first }
                 .thenComparing(compareBy { it.second })
                 .thenComparing(compareBy { it.third.partNumber })
         )
         .asSequence()
-        .map { (_, day, part) -> toRow(part, day) }
-        .forEach(::printRow)
+        .map { (_, day, part) -> toDataRow(part, day) }
+        .map{
+            rowToPrint(toStringRow(it)).println()
+            it
+        }
+        .reduce { acc, row ->
+            acc.merge(row) { a, b -> when{
+                a is Duration && b is Duration -> a + b
+                a is Long && b is Long -> a + b
+                a is Int && b is Int -> a + b
+                a is Boolean && b is Boolean -> a && b
+                else -> throw IllegalStateException()
+            }}
+        }
+
+    rowToPrint(toStringRow(totalRow)).replaceRange(0, 11, "      Total" ).println()
 }
 
-private fun printRow(row: Map<Headers, String>) {
-    entries.joinToString(" |") {
+private fun rowToPrint(row: Map<Headers, String>) : String {
+    return entries.joinToString(" |") {
         val columnString = row[it] ?: ""
         val columnLength = it.label.length
         val ansiColorSize = if (columnString.contains('')) 9 else 0
         columnString.padStart(columnLength + ansiColorSize - 1)
-    }.println()
+    }
 }
 
-private fun toRow(part: Part<out Any>, day: Day): Map<Headers, String> {
+private fun toDataRow(part: Part<out Any>, day: Day): Map<Headers, Any> {
     val testData = part.runTest()?.let { (testResult, testParsingDuration, testRunningDuration, testMemory) ->
         listOf(
-            TEST_RESULT to ((testResult == part.expectedTestResult).takeIf { it }?.let { "Passed".toGreenString() }
-                ?: "Failed".toRedString()),
-            TEST_RUNTIME to testRunningDuration.toColorizedString(),
-            TEST_MEMORY to testMemory.toColorizedReadableMemorySize(),
+            TEST_RESULT to (testResult == part.expectedTestResult),
+            TEST_RUNTIME to testRunningDuration,
+            TEST_MEMORY to testMemory,
         )
     }
     val (result, parsingDuration, runningDuration, memory) = part.run()
 
     return (listOf(
-        DAY to "%02d".format(day),
-        PART to "${part.partNumber}",
-        PARSING_TIME to parsingDuration.toString(),
-        RUNTIME to runningDuration.toColorizedString(),
-        MEMORY to memory.toColorizedReadableMemorySize()
+        DAY to day,
+        PART to part.partNumber,
+        PARSING_TIME to parsingDuration,
+        RUNTIME to runningDuration,
+        MEMORY to memory
     ) + (testData ?: emptyList())).toMap()
+}
+
+private fun toStringRow(dataRow: Map<Headers, Any>): Map<Headers, String> {
+    return dataRow.mapValues {
+        val value = it.value
+        when {
+            it.key == DAY -> "%02d".format(value)
+            it.key == PART -> value.toString()
+            it.key == TEST_RESULT && value is Boolean -> if(value) {"Passed".toGreenString()} else {"Failed".toRedString()}
+            it.key == TEST_RUNTIME && value is Duration -> value.toColorizedString()
+            it.key == TEST_MEMORY && value is Long -> value.toColorizedReadableMemorySize()
+            it.key == PARSING_TIME && value is Duration -> value.toString()
+            it.key == RUNTIME && value is Duration -> value.toColorizedString()
+            it.key == MEMORY && value is Long -> value.toColorizedReadableMemorySize()
+            else -> throw IllegalStateException()
+        }
+    }
 }
 
 fun printUsage() {
