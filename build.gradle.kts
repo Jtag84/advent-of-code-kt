@@ -21,6 +21,7 @@ dependencies {
     implementation("guru.nidi:graphviz-kotlin:0.18.0")
     implementation("io.arrow-kt:arrow-core:1.2.1")
     implementation("org.apache.commons:commons-math3:3.6.1")
+    implementation("org.ejml:ejml-simple:0.43.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
 }
 

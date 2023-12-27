@@ -16,22 +16,23 @@ class Part<T>(
     val partNumber: PartNumber,
     private val inputParser: Parser<T>,
     val expectedTestResult: Any?,
-    val solvingFunction: (T) -> Any
+    val solvingFunction: Part<T>.(T) -> Any,
+    var isTest: Boolean = false
 ) {
     companion object {
-        fun <T : Any> part1(inputParser: Parser<T>, expectedTestResult: Any?, solvingFunction: (T) -> Any): Part<T> {
+        fun <T : Any> part1(inputParser: Parser<T>, expectedTestResult: Any?, solvingFunction: Part<T>.(T) -> Any): Part<T> {
             return Part(1, inputParser, expectedTestResult, solvingFunction)
         }
 
-        fun part1(expectedTestResult: Any?, solvingFunction: (List<String>) -> Any): Part<List<String>> {
+        fun part1(expectedTestResult: Any?, solvingFunction: Part<List<String>>.(List<String>) -> Any): Part<List<String>> {
             return Part(1, parseLines, expectedTestResult, solvingFunction)
         }
 
-        fun <T : Any> part2(inputParser: Parser<T>, expectedTestResult: Any?, solvingFunction: (T) -> Any): Part<T> {
+        fun <T : Any> part2(inputParser: Parser<T>, expectedTestResult: Any?, solvingFunction: Part<T>.(T) -> Any): Part<T> {
             return Part(2, inputParser, expectedTestResult, solvingFunction)
         }
 
-        fun part2(expectedTestResult: Any?, solvingFunction: (List<String>) -> Any): Part<List<String>> {
+        fun part2(expectedTestResult: Any?, solvingFunction: Part<List<String>>.(List<String>) -> Any): Part<List<String>> {
             return Part(2, parseLines, expectedTestResult, solvingFunction)
         }
     }
@@ -74,6 +75,8 @@ class Part<T>(
     }
 
     fun runTest(): Tuple4<Any, Duration, Duration, Long>? {
+        isTest = true
+
         if (expectedTestResult == null) {
             return null
         }
@@ -111,6 +114,7 @@ class Part<T>(
     }
 
     fun run(): Tuple4<Any, Duration, Duration, Long> {
+        isTest = false
         val input = solvingFunction.javaClass.readInputs()
         return runPart(input)
     }
