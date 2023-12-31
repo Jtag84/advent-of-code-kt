@@ -14,6 +14,6 @@ abstract class Node<T : Node<T>> : Comparable<Node<*>> {
     }
 
     override fun compareTo(other: Node<*>): Int {
-        return this.fScore - other.fScore
+        return this.fScore.compareTo(other.fScore)
     }
 }

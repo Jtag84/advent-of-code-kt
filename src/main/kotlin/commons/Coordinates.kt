@@ -3,7 +3,16 @@ package commons
 import commons.Direction.*
 import kotlin.math.abs
 
-data class Coordinates (val x:Long, val y:Long)
+data class Coordinates (val x:Long, val y:Long) : Comparable<Coordinates> {
+    override fun compareTo(other: Coordinates): Int {
+        return if(x == other.x) {
+            y.compareTo(other.y)
+        }
+        else {
+            x.compareTo(other.x)
+        }
+    }
+}
 
 enum class Direction {
     UP,
@@ -93,3 +102,11 @@ fun Coordinates.negate(): Coordinates {
     return Coordinates(-x, -y)
 }
 
+fun Map<Coordinates, EnumParser>.toStringMap(): String {
+    return this.entries.groupBy ({ it.key.y }, {it.key.x to it.value.parsingString} )
+        .mapValues { it.value.sortedBy { it.first }.map { it.second }.joinToString("") }
+        .entries
+        .sortedBy { it.key }
+        .map { it.value }
+        .joinToString("\n")
+}
