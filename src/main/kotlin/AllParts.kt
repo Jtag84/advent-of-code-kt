@@ -1,6 +1,8 @@
 val allParts = listOf(
     year2015.day16.part1,
     year2015.day16.part2,
+    year2015.day17.part1,
+    year2015.day17.part2,
     year2021.day23.part1,
     year2021.day23.part2,
     year2021.day24.part1,
