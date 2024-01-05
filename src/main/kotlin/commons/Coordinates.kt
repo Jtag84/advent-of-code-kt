@@ -3,6 +3,15 @@ package commons
 import commons.Direction.*
 import kotlin.math.abs
 
+data class Coordinates3d (val x:Long, val y:Long, val z:Long)
+
+fun Coordinates3d.xRotate90CounterClockwise() = Coordinates3d(this.x, -this.z, this.y)
+fun Coordinates3d.yRotate90CounterClockwise() = Coordinates3d(this.z, this.y, -this.x)
+fun Coordinates3d.zRotate90CounterClockwise() = Coordinates3d(-this.y, this.x, this.z)
+fun Coordinates3d.xRotate90Clockwise() = Coordinates3d(this.x, this.z, -this.y)
+fun Coordinates3d.yRotate90Clockwise() = Coordinates3d(-this.z, this.y, this.x)
+fun Coordinates3d.zRotate90Clockwise() = Coordinates3d(this.y, -this.x, this.z)
+
 data class Coordinates (val x:Long, val y:Long) : Comparable<Coordinates> {
     override fun compareTo(other: Coordinates): Int {
         return if(x == other.x) {
@@ -55,6 +64,10 @@ fun Coordinates.directionTo(coordinates: Coordinates): Direction? {
 
 fun Coordinates.manhattanDistance(coordinates: Coordinates): Long {
     return abs(this.x - coordinates.x) + abs(this.y - coordinates.y)
+}
+
+fun Coordinates3d.manhattanDistance(coordinates: Coordinates3d): Long {
+    return abs(this.x - coordinates.x) + abs(this.y - coordinates.y) + abs(this.z - coordinates.z)
 }
 
 fun Coordinates.aroundWithDiagonals(): Set<Coordinates> {
