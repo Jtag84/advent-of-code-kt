@@ -104,6 +104,23 @@ fun <T> List<T>.sublists(): List<List<T>> {
     }.reversed().map { it.reversed() }
 }
 
+fun <T> List<T>.combinations(): List<List<T>> {
+    val combinations = mutableListOf<List<T>>()
+    val n = this.size
+
+    for (i in 0 until (1 shl n)) {
+        val combination = mutableListOf<T>()
+        for (j in 0 until n) {
+            if (i and (1 shl j) > 0) {
+                combination.add(this[j])
+            }
+        }
+        if (combination.isNotEmpty()) combinations.add(combination)
+    }
+
+    return combinations
+}
+
 fun <T> List<List<T?>>.transpose(): List<List<T?>> {
     if (this.isEmpty() || this.first().isEmpty()) return emptyList()
 
