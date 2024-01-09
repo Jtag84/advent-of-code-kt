@@ -146,3 +146,14 @@ fun Long.toColorizedReadableMemorySize(): String {
         else -> readableMemory.toGreenString()
     }
 }
+
+typealias Rest = Long
+typealias Modulo = Long
+
+fun chineseRemainder(restModulos: Set< Pair<Rest, Modulo>>) : Long {
+    val coprimeProduct = restModulos.map { it.second }.reduce(Math::multiplyExact)
+    return restModulos.sumOf { (rest, modulo) ->
+        val nProduct = coprimeProduct/modulo
+        (1..modulo).asSequence().map { nProduct * it }.first { it % modulo == 1L } * rest
+    } % coprimeProduct
+}

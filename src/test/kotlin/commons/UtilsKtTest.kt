@@ -30,4 +30,36 @@ class UtilsKtTest {
             ), groupedChars
         )
     }
+
+    @Test
+    fun chineseRemainder() {
+        val chineseRemainder1 = chineseRemainder(
+            setOf(
+                2L to 3,
+                3L to 5,
+                2L to 7
+            )
+        )
+        check (chineseRemainder1 == 23L)
+
+        val chineseRemainder2 = chineseRemainder(
+            setOf(
+                0L to 17,
+                11L to 13,
+                16L to 19
+            )
+        )
+        check (chineseRemainder2 == 3417L)
+
+        val chineseRemainder3 = chineseRemainder(
+            setOf(
+                0L to 7,
+                12L to 13,
+                55L to 59,
+                25L to 31,
+                12L to 19,
+            )
+        )
+        check (chineseRemainder3 == 1_068_781L)
+    }
 }
