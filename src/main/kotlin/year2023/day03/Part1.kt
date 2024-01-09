@@ -2,7 +2,6 @@ package year2023.day03
 
 import arrow.core.partially1
 import commons.Part.Companion.part1
-import commons.aroundWithDiagonals
 
 fun main() {
     part1.runAndPrintTest()
@@ -20,7 +19,7 @@ val part1 = part1(schematicsItemParser, 4361L) { schematicItems ->
 
 fun isNextToSymbol(symbols: Set<SchematicItem.Symbol>, partNumber: SchematicItem.PartNumber) : Boolean{
     val allNumberCoordinates = partNumber.allNumberCoordinates()
-    val aroundNumberCoordinates = allNumberCoordinates.flatMap { it.aroundWithDiagonals()}.minus(allNumberCoordinates.toSet())
+    val aroundNumberCoordinates = allNumberCoordinates.flatMap { it.allAround()}.minus(allNumberCoordinates.toSet())
     val symbolsCoordinates = symbols.map { it.coordinates }
 
     return aroundNumberCoordinates.any {it in symbolsCoordinates}

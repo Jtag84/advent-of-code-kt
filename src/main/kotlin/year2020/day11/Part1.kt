@@ -1,8 +1,7 @@
 package year2020.day11
 
-import commons.Coordinates
+import commons.*
 import commons.Part.Companion.part1
-import commons.aroundWithDiagonals
 
 fun main() {
     part1.runAndPrintTest()
@@ -11,15 +10,15 @@ fun main() {
 
 val part1 = part1(inputParser, 37) { seatLayout ->
     val emptySeats = seatLayout.entries.filter { it.value == LayoutItem.EMPTY_SEAT }.map { it.key }.toSet()
-    val neighbors = emptySeats.map { it to it.aroundWithDiagonals().filter { emptySeats.contains(it) }.toSet() }.toMap()
+    val neighbors = emptySeats.map { it to it.allAround().filter { emptySeats.contains(it) }.toSet() }.toMap()
     generateSequence(Seats(emptySeats, emptySet())) { applyRound(it, neighbors, 4) }.zipWithNext().takeWhile { (previous, current) -> previous != current }.last().second.second.count()
 }
 
-typealias EmptySeats = Set<Coordinates>
-typealias OccupiedSeats = Set<Coordinates>
+typealias EmptySeats = Set<Coordinates2d>
+typealias OccupiedSeats = Set<Coordinates2d>
 typealias Seats = Pair<EmptySeats, OccupiedSeats>
 
-fun applyRound(seats: Seats, neighbors: Map<Coordinates, Set<Coordinates>>, numberOfOccupiedSeatsToBecomeEmpty: Int) : Seats {
+fun applyRound(seats: Seats, neighbors: Map<Coordinates2d, Set<Coordinates2d>>, numberOfOccupiedSeatsToBecomeEmpty: Int) : Seats {
     val (emptySeats, occupiedSeats) = seats
 
     val newlyOccupiedSeats = emptySeats.mapNotNull { emptySeat ->

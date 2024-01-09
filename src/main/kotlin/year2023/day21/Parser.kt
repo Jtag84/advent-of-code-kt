@@ -2,14 +2,14 @@ package year2023.day21
 
 import cc.ekblad.konbini.Parser
 import cc.ekblad.konbini.parser
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.EnumParser
 import commons.coordinatesParser
 import commons.enumParser
 
 typealias MaxX = Long
 typealias MaxY = Long
-typealias Garden = Pair<Map<Coordinates, GardenElement>, Pair<MaxX, MaxY>>
+typealias Garden = Pair<Map<Coordinates2d, GardenElement>, Pair<MaxX, MaxY>>
 
 val inputParser: Parser<Garden> = parser {
     val map = coordinatesParser(enumParser<GardenElement>())().toMap()

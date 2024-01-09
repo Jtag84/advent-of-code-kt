@@ -18,9 +18,9 @@ val part1 = part1(inputParser, 42) { gardenMap ->
     }.drop(64).first().count()
 }
 
-val cache = hashMapOf<Coordinates, Set<Coordinates>>()
+val cache = hashMapOf<Coordinates2d, Set<Coordinates2d>>()
 
-fun nextSteps(gardenMap: Garden, coordinates: Coordinates): Set<Coordinates> {
+fun nextSteps(gardenMap: Garden, coordinates: Coordinates2d): Set<Coordinates2d> {
     return cache.getOrPut(coordinates) {
         val (map, max) = gardenMap
         val (maxX, maxY) = max

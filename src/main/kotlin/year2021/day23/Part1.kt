@@ -17,13 +17,13 @@ val part1 = part1(inputParser, 12521) { (burrowMap, amphipods) ->
     val startNode = AmphipodsStateNode(burrowMap, 2, amphipods)
 
     val goal = setOf(
-        Coordinates(x=3, y=2) to AMBER_AMPHIPOD,   Coordinates(x=5, y=2) to BRONZE_AMPHIPOD,   Coordinates(x=7, y=2) to COPPER_AMPHIPOD, Coordinates(x=9, y=2) to DESERT_AMPHIPOD,
-        Coordinates(x=3, y=3) to AMBER_AMPHIPOD,   Coordinates(x=5, y=3) to BRONZE_AMPHIPOD,   Coordinates(x=7, y=3) to COPPER_AMPHIPOD, Coordinates(x=9, y=3) to DESERT_AMPHIPOD
+        Coordinates2d(x=3, y=2) to AMBER_AMPHIPOD,   Coordinates2d(x=5, y=2) to BRONZE_AMPHIPOD,   Coordinates2d(x=7, y=2) to COPPER_AMPHIPOD, Coordinates2d(x=9, y=2) to DESERT_AMPHIPOD,
+        Coordinates2d(x=3, y=3) to AMBER_AMPHIPOD,   Coordinates2d(x=5, y=3) to BRONZE_AMPHIPOD,   Coordinates2d(x=7, y=3) to COPPER_AMPHIPOD, Coordinates2d(x=9, y=3) to DESERT_AMPHIPOD
     )
 
     val goalByType = goal.groupBy( { it.second } , {it.first}).mapValues { it.value.toSet() }
 
-    val (cost, path) = AStar.search(startNode, {it.heuristic(goalByType)}, {it.amphipods == goal})
+    val (cost, _) = AStar.search(startNode, {it.heuristic(goalByType)}, {it.amphipods == goal})
 
   // uncomment to print out each step
 //    path.reversed().forEach {
@@ -37,7 +37,7 @@ val part1 = part1(inputParser, 12521) { (burrowMap, amphipods) ->
     cost
 }
 
-val outsideRoomCoordinates = setOf(Coordinates(3, 1), Coordinates(5, 1), Coordinates(7, 1), Coordinates(9, 1))
+val outsideRoomCoordinates = setOf(Coordinates2d(3, 1), Coordinates2d(5, 1), Coordinates2d(7, 1), Coordinates2d(9, 1))
 
 data class AmphipodsStateNode(val burrowMap: BurrowMap, val roomSize: Int, val amphipods: Amphipods) : Node<AmphipodsStateNode>() {
     val amphipodCoordinates = amphipods.map { it.first }.toSet()
@@ -81,7 +81,7 @@ data class AmphipodsStateNode(val burrowMap: BurrowMap, val roomSize: Int, val a
     }
 
 
-    private fun Coordinates.isInFinalRoom(type: BurrowMapElement) : Boolean {
+    private fun Coordinates2d.isInFinalRoom(type: BurrowMapElement) : Boolean {
         return when (type){
             OUTSIDE ,WALL, EMPTY_SPACE -> throw  IllegalStateException()
             AMBER_AMPHIPOD -> y > 1 && x == 3L
@@ -91,11 +91,11 @@ data class AmphipodsStateNode(val burrowMap: BurrowMap, val roomSize: Int, val a
         }
     }
 
-    private fun Coordinates.isInHallway() : Boolean {
+    private fun Coordinates2d.isInHallway() : Boolean {
         return (this.y == 1L)
     }
 
-    fun getAccessibleCoordinates(type: BurrowMapElement, from: Coordinates) : Set<Coordinates> {
+    fun getAccessibleCoordinates(type: BurrowMapElement, from: Coordinates2d) : Set<Coordinates2d> {
         return when {
             from.isInHallway() && isFinalRoomOccupiedByDifferentType(type).not() -> {
                 getAvailableFinalRoomCoordinates(type, from).toSet()
@@ -104,11 +104,11 @@ data class AmphipodsStateNode(val burrowMap: BurrowMap, val roomSize: Int, val a
                    val isHallwayAccessible =
                        generateSequence ( from.up() ) {it.up()}.takeWhile { it.y > 1 }.none { amphipodCoordinates.contains(it) }
                 if(isHallwayAccessible) {
-                    val leftHallway = generateSequence(Coordinates(from.x, 1)) {it.left()}
+                    val leftHallway = generateSequence(Coordinates2d(from.x, 1)) {it.left()}
                         .drop(1)
                         .takeWhile { it.x > 0 && amphipodCoordinates.contains(it).not() }
                         .filterNot { outsideRoomCoordinates.contains(it)}
-                    val rightHallway = generateSequence(Coordinates(from.x, 1)) {it.right()}
+                    val rightHallway = generateSequence(Coordinates2d(from.x, 1)) {it.right()}
                         .drop(1)
                         .takeWhile { it.x < 12 && amphipodCoordinates.contains(it).not() }
                         .filterNot { outsideRoomCoordinates.contains(it)}
@@ -132,20 +132,20 @@ data class AmphipodsStateNode(val burrowMap: BurrowMap, val roomSize: Int, val a
 
     private fun getAvailableFinalRoomCoordinates(
         type: BurrowMapElement,
-        from: Coordinates
-    ): Sequence<Coordinates> {
+        from: Coordinates2d
+    ): Sequence<Coordinates2d> {
         val finalRoomX = getFinalRoomX(type)
         val step = if (finalRoomX > from.x) {
-            Coordinates::right
+            Coordinates2d::right
         } else {
-            Coordinates::left
+            Coordinates2d::left
         }
-        val isFinalRoomAccessible = from.isInFinalRoom(type) || generateSequence(step(Coordinates(from.x, 1), 1)) { coordinates -> step(coordinates, 1) }
+        val isFinalRoomAccessible = from.isInFinalRoom(type) || generateSequence(step(Coordinates2d(from.x, 1), 1)) { coordinates -> step(coordinates, 1) }
             .takeWhile { it.x != finalRoomX }
             .none { amphipodCoordinates.contains(it) }
 
         return if (isFinalRoomAccessible) {
-            generateSequence(Coordinates(finalRoomX, 2)) {it.down()}.take(roomSize)
+            generateSequence(Coordinates2d(finalRoomX, 2)) {it.down()}.take(roomSize)
                 .takeWhile {amphipodCoordinates.contains(it).not() }
         } else {
             emptySequence()
@@ -172,7 +172,7 @@ data class AmphipodsStateNode(val burrowMap: BurrowMap, val roomSize: Int, val a
     }
 }
 
-fun Amphipods.distanceTo(otherByType: Map<BurrowMapElement, Set<Coordinates>>): Int {
+fun Amphipods.distanceTo(otherByType: Map<BurrowMapElement, Set<Coordinates2d>>): Int {
     val totalManhattanDistance = this.groupBy( { it.second } , {it.first})
         .mapValues {
             val difference = Sets.symmetricDifference(it.value.toSet(), otherByType[it.key]!!)
@@ -191,14 +191,14 @@ fun Amphipods.distanceTo(otherByType: Map<BurrowMapElement, Set<Coordinates>>): 
     return totalManhattanDistance.toInt()
 }
 
-private fun calculateTotalDistance (left: Coordinates, right: Coordinates) : Long {
+private fun calculateTotalDistance (left: Coordinates2d, right: Coordinates2d) : Long {
     return when {
         left.x != right.x -> abs(left.x - right.x) + left.y - 1 + right.y -1
         else -> abs(left.y - right.y)
     }
 }
 
-fun AmphipodsStateNode.heuristic(goalByType: Map<BurrowMapElement, Set<Coordinates>>): Int {
+fun AmphipodsStateNode.heuristic(goalByType: Map<BurrowMapElement, Set<Coordinates2d>>): Int {
     val groupedByType = this.amphipods.groupBy( { it.second } , {it.first}).mapValues { it.value.toSet() }
     return goalByType.entries
         .sumOf {

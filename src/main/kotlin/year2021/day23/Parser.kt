@@ -4,8 +4,8 @@ import cc.ekblad.konbini.*
 import commons.*
 import year2021.day23.BurrowMapElement.*
 
-typealias BurrowMap = Map<Coordinates, BurrowMapElement>
-typealias Amphipods = Set<Pair<Coordinates, BurrowMapElement>>
+typealias BurrowMap = Map<Coordinates2d, BurrowMapElement>
+typealias Amphipods = Set<Pair<Coordinates2d, BurrowMapElement>>
 
 val extraLines =
     """

@@ -2,12 +2,12 @@ package year2023.day23
 
 import cc.ekblad.konbini.Parser
 import cc.ekblad.konbini.parser
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.EnumParser
 import commons.coordinatesParser
 import commons.enumParser
 
-typealias TrailMap = Map<Coordinates, TrailMapElement>
+typealias TrailMap = Map<Coordinates2d, TrailMapElement>
 
 val inputParser: Parser<TrailMap> = parser {
     coordinatesParser(enumParser<TrailMapElement>())().toMap()

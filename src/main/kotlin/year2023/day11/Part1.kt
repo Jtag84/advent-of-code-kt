@@ -1,7 +1,7 @@
 package year2023.day11
 
 import com.google.common.collect.Sets
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.Part.Companion.part1
 import commons.manhattanDistance
 import year2023.day11.SpaceData.EMPTY_SPACE
@@ -16,7 +16,7 @@ val part1 = part1(inputParser, 374L) { galaxyMap ->
     calculateDistanceSumBetweenGalaxies(galaxyMap)
 }
 
-fun calculateDistanceSumBetweenGalaxies(galaxyMap: Map<Coordinates, SpaceData>, expansionFactor: Long = 1L): Long {
+fun calculateDistanceSumBetweenGalaxies(galaxyMap: Map<Coordinates2d, SpaceData>, expansionFactor: Long = 1L): Long {
     val galaxyMapByColumn = galaxyMap.entries.groupBy({ it.key.x }, { it.value })
     val galaxyMapByRow = galaxyMap.entries.groupBy({ it.key.y }, { it.value })
     val rowsToExpand = galaxyMapByRow.entries.filter { row -> row.value.all { it == EMPTY_SPACE } }.map { it.key }
@@ -29,7 +29,7 @@ fun calculateDistanceSumBetweenGalaxies(galaxyMap: Map<Coordinates, SpaceData>, 
             val y = coordinates.y
             val xExpansion = columnsToExpand.count { it < x } * expansionFactor
             val yExpansion = rowsToExpand.count { it < y } * expansionFactor
-            Coordinates(x + xExpansion, y + yExpansion)
+            Coordinates2d(x + xExpansion, y + yExpansion)
         }.toSet()
 
     return Sets.combinations(galaxiesCoordinates, 2).sumOf {

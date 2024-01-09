@@ -32,12 +32,12 @@ fun <T> Parser<T>.parseOrThrowException(input: String): T {
     }
 }
 
-fun <T> coordinatesParser(coordinateValueParser: Parser<T>): Parser<List<Pair<Coordinates, T>>> = parser {
+fun <T> coordinatesParser(coordinateValueParser: Parser<T>): Parser<List<Pair<Coordinates2d, T>>> = parser {
     val lines = parseLines()
     lines.flatMapIndexed { lineNumber, line ->
         line.mapIndexed { linePosition, char ->
             Pair(
-                Coordinates(linePosition.toLong(), lineNumber.toLong()),
+                Coordinates2d(linePosition.toLong(), lineNumber.toLong()),
                 coordinateValueParser.parseOrThrowException(char.toString())
             )
         }

@@ -1,6 +1,6 @@
 package year2023.day18
 
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.Part.Companion.part1
 
 fun main() {
@@ -13,7 +13,7 @@ val part1 = part1(inputParser, 62L) { digDirections ->
 }
 
 fun calculateDigArea(digDirections: List<DigDirection>): Long {
-    val trenchCorners = digDirections.fold(listOf(Coordinates(0, 0))) { acc, digDirection ->
+    val trenchCorners = digDirections.fold(listOf(Coordinates2d(0, 0))) { acc, digDirection ->
         acc + digDirection.direction.move(acc.last(), digDirection.length)
     }
 

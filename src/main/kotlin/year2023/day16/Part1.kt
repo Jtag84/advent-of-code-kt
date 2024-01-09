@@ -11,7 +11,7 @@ fun main() {
 }
 
 val part1 = part1(inputParser, 46) { grid ->
-    movingBeam(grid, Coordinates(0, 0) to RIGHT, mutableSetOf()).map { it.first }.distinct().count()
+    movingBeam(grid, Coordinates2d(0, 0) to RIGHT, mutableSetOf()).map { it.first }.distinct().count()
 }
 
 fun movingBeam(grid: Grid, position: Position, visitedPositions: MutableSet<Position>): List<Position> {

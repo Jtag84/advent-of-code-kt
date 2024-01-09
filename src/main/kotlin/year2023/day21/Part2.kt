@@ -43,12 +43,12 @@ val part2 = part2(inputParser, 394693535848011) { gardenMap ->
     a * (x * x) + b * x + c
 }
 
-fun nextStepsPart2(gardenMap: Garden, coordinates: Coordinates): List<Coordinates> {
+fun nextStepsPart2(gardenMap: Garden, coordinates: Coordinates2d): List<Coordinates2d> {
     val (map, max) = gardenMap
     val (maxX, maxY) = max
     return listOf(coordinates.north(), coordinates.east(), coordinates.west(), coordinates.south())
         .filter {
-            map[Coordinates(adjustCoordinates(it.x, maxX), adjustCoordinates(it.y, maxY))]!! != GardenElement.ROCK
+            map[Coordinates2d(adjustCoordinates(it.x, maxX), adjustCoordinates(it.y, maxY))]!! != GardenElement.ROCK
         }
 }
 

@@ -13,8 +13,8 @@ fun main() {
 val part2 = part2(inputParser, 71) { heatLossMap ->
     val maxX = heatLossMap.keys.maxOf { it.x }
     val maxY = heatLossMap.keys.maxOf { it.y }
-    val start = UltraCrucibleNode(Coordinates(0, 0), emptyList(), heatLossMap, maxX, maxY)
-    val goalCoordinates = Coordinates(heatLossMap.keys.maxOf { it.x }, heatLossMap.keys.maxOf { it.y })
+    val start = UltraCrucibleNode(Coordinates2d(0, 0), emptyList(), heatLossMap, maxX, maxY)
+    val goalCoordinates = Coordinates2d(heatLossMap.keys.maxOf { it.x }, heatLossMap.keys.maxOf { it.y })
     val goal = UltraCrucibleNode(goalCoordinates, emptyList(), heatLossMap, maxX, maxY)
     AStar.search(
         start,
@@ -24,7 +24,7 @@ val part2 = part2(inputParser, 71) { heatLossMap ->
 }
 
 data class UltraCrucibleNode(
-    val coordinates: Coordinates,
+    val coordinates: Coordinates2d,
     val last10Directions: List<Direction>,
     private val heatLossMap: HeatLossMap,
     private val maxX: Long,
@@ -50,7 +50,7 @@ data class UltraCrucibleNode(
             .toList()
     }
 
-    private fun isWithinBounds(coordinates: Coordinates) =
+    private fun isWithinBounds(coordinates: Coordinates2d) =
         coordinates.x >= 0 && coordinates.y >= 0 && coordinates.x <= maxX && coordinates.y <= maxY
 
     private fun getLastNInSameDirections(n: Int): Direction? {

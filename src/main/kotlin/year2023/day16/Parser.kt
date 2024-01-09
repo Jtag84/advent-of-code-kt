@@ -3,13 +3,13 @@ package year2023.day16
 import cc.ekblad.konbini.parser
 import commons.*
 
-typealias Grid = Map<Coordinates, GridElement>
+typealias Grid = Map<Coordinates2d, GridElement>
 
 val inputParser = parser {
     coordinatesParser(enumParser<GridElement>())().toMap()
 }
 
-typealias Position = Pair<Coordinates, Direction>
+typealias Position = Pair<Coordinates2d, Direction>
 
 enum class GridElement(override val parsingString: String) : EnumParser {
     EMPTY("."),

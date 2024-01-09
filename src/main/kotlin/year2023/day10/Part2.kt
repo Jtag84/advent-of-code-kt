@@ -1,7 +1,7 @@
 package year2023.day10
 
 import com.google.common.collect.Sets
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.Part.Companion.part2
 import year2023.day10.Tile.*
 
@@ -20,7 +20,7 @@ val part2 = part2(inputParser, 4) { pipeMap ->
     allNonLoopTiles.count { isInLoop(finalPipeMap, pathWithoutHorizontals, it) }
 }
 
-fun isInLoop(pipeMap: Map<Coordinates, Tile>, loopPath: Set<Coordinates>, coordinates: Coordinates): Boolean {
+fun isInLoop(pipeMap: Map<Coordinates2d, Tile>, loopPath: Set<Coordinates2d>, coordinates: Coordinates2d): Boolean {
     if (coordinates.x == 0L) {
         return false
     }
@@ -53,6 +53,6 @@ fun isInLoop(pipeMap: Map<Coordinates, Tile>, loopPath: Set<Coordinates>, coordi
     return (edgeCount + verticalTileCount.toLong()) % 2 == 1L
 }
 
-fun rayCastFrom(coordinates: Coordinates): Set<Coordinates> {
-    return (0..coordinates.x).map { Coordinates(it, coordinates.y) }.toSet()
+fun rayCastFrom(coordinates: Coordinates2d): Set<Coordinates2d> {
+    return (0..coordinates.x).map { Coordinates2d(it, coordinates.y) }.toSet()
 }

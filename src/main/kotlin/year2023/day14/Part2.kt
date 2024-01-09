@@ -1,7 +1,7 @@
 package year2023.day14
 
 import arrow.core.partially1
-import commons.Coordinates
+import commons.*
 import commons.Part.Companion.part2
 import commons.right
 import commons.rotateClockwise
@@ -27,9 +27,9 @@ val part2 = part2(inputParser, 64L) { platformMap ->
     repeatingSequence[(1_000_000_000 - 200) % 14]
 }
 
-val cache = hashMapOf<Map<Coordinates, Rock>, Map<Coordinates, Rock>>()
+val cache = hashMapOf<Map<Coordinates2d, Rock>, Map<Coordinates2d, Rock>>()
 
-fun tiltCycle(platformMap: Map<Coordinates, Rock>): Map<Coordinates, Rock> {
+fun tiltCycle(platformMap: Map<Coordinates2d, Rock>): Map<Coordinates2d, Rock> {
     return cache.getOrPut(platformMap) {
         val tiltedNorthMap = tiltNorth(platformMap)
         val tiltedWestMap = rotateMapCounterClockwiseAndTiltNorth(tiltedNorthMap)
@@ -39,18 +39,18 @@ fun tiltCycle(platformMap: Map<Coordinates, Rock>): Map<Coordinates, Rock> {
     }
 }
 
-fun rotateMapCounterClockwiseAndTiltNorth(platformMap: Map<Coordinates, Rock>): Map<Coordinates, Rock> {
+fun rotateMapCounterClockwiseAndTiltNorth(platformMap: Map<Coordinates2d, Rock>): Map<Coordinates2d, Rock> {
     val rotatedMap = rotateCounterClockwise(platformMap)
     return tiltNorth(rotatedMap)
 }
 
-private fun rotateCounterClockwise(platformMap: Map<Coordinates, Rock>): Map<Coordinates, Rock> {
+private fun rotateCounterClockwise(platformMap: Map<Coordinates2d, Rock>): Map<Coordinates2d, Rock> {
     val numberOfRows = platformMap.maxOf { it.key.y }
     val rotatedMap = platformMap.toList().associate { it.first.rotateClockwise().right(numberOfRows) to it.second }
     return rotatedMap
 }
 
-fun tiltNorth(platformMap: Map<Coordinates, Rock>): Map<Coordinates, Rock> {
+fun tiltNorth(platformMap: Map<Coordinates2d, Rock>): Map<Coordinates2d, Rock> {
     val rocksByRow = platformMap.entries.groupBy({ it.key.y }, { it.key to it.value })
     val tiltedNorthRock = tiltNorth(rocksByRow)
     val newPlatformMap = platformMap.toMutableMap()

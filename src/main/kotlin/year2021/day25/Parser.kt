@@ -3,7 +3,7 @@ package year2021.day25
 import cc.ekblad.konbini.*
 import commons.*
 
-val inputParser = parser {
+val inputParser: Parser<Map<Coordinates2d, SeaCucumber>> = parser {
     coordinatesParser(enumParser<SeaCucumber>())().toMap()
 }
 

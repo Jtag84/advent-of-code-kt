@@ -8,8 +8,8 @@ fun main() {
     part2.runAndPrint()
 }
 
-typealias ShipCoordinates = Coordinates
-typealias WaypointCoordinates = Coordinates
+typealias ShipCoordinates = Coordinates2d
+typealias WaypointCoordinates = Coordinates2d
 typealias ShipWaypoint = Pair<ShipCoordinates, WaypointCoordinates>
 
 val part2 = part2(inputParser, 286L) { instructions ->

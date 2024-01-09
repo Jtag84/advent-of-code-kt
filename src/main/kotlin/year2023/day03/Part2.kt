@@ -2,9 +2,8 @@ package year2023.day03
 
 import arrow.core.partially1
 import com.google.common.collect.Sets
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.Part.Companion.part2
-import commons.aroundWithDiagonals
 
 fun main() {
     part2.runAndPrintTest()
@@ -22,7 +21,7 @@ val part2 = part2(schematicsItemParser, 467835L) { schematicItems ->
         .asSequence()
         .filter(::isNextToSymbol.partially1(gears))
         .groupBy {
-            val aroundCoordinates = it.allNumberCoordinates().flatMap(Coordinates::aroundWithDiagonals).minus(it).toSet()
+            val aroundCoordinates = it.allNumberCoordinates().flatMap(Coordinates2d::allAround).minus(it).toSet()
             Sets.intersection(gearCoordinates, aroundCoordinates).let { gearSet ->
                 check(gearSet.size==1)
                 gearSet.first()

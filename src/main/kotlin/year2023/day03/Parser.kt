@@ -1,27 +1,27 @@
 package year2023.day03
 
 import cc.ekblad.konbini.*
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.right
 
 sealed class SchematicItem {
-    data class PartNumber(val number: Long, val coordinates: Coordinates) : SchematicItem()
-    data class Symbol(val symbol: Char, val coordinates: Coordinates) : SchematicItem()
+    data class PartNumber(val number: Long, val coordinates: Coordinates2d) : SchematicItem()
+    data class Symbol(val symbol: Char, val coordinates: Coordinates2d) : SchematicItem()
 
-    data class Empty(val coordinates: Coordinates) : SchematicItem()
+    data class Empty(val coordinates: Coordinates2d) : SchematicItem()
 }
 
-fun SchematicItem.PartNumber.allNumberCoordinates(): Sequence<Coordinates> {
+fun SchematicItem.PartNumber.allNumberCoordinates(): Sequence<Coordinates2d> {
     val numberOfDigits = number.toString().length
 
-    return generateSequence(coordinates, Coordinates::right).take(numberOfDigits)
+    return generateSequence(coordinates, Coordinates2d::right).take(numberOfDigits)
 }
 
 val partNumberParser = { lineNumber: Long, xOffset: Long ->
     parser {
         val currentPosition = position - xOffset
         val partNumber = regex("[0-9]+").toLong()
-        SchematicItem.PartNumber(partNumber, Coordinates(currentPosition, lineNumber))
+        SchematicItem.PartNumber(partNumber, Coordinates2d(currentPosition, lineNumber))
     }
 }
 
@@ -32,7 +32,7 @@ val symbolParser = { lineNumber: Long, xOffset: Long ->
             check(it.length == 1)
             it[0]
         }
-        SchematicItem.Symbol(symbol, Coordinates(currentPosition, lineNumber))
+        SchematicItem.Symbol(symbol, Coordinates2d(currentPosition, lineNumber))
     }
 }
 
@@ -40,7 +40,7 @@ val emptyParser = { lineNumber: Long, xOffset: Long ->
     parser {
         val currentPosition = position - xOffset
         char('.')
-        SchematicItem.Empty(Coordinates(currentPosition, lineNumber))
+        SchematicItem.Empty(Coordinates2d(currentPosition, lineNumber))
     }
 }
 

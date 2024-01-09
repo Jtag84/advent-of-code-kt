@@ -1,6 +1,6 @@
 package year2023.day23
 
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.Part.Companion.part2
 import commons.cardinals
 import year2023.day23.TrailMapElement.FOREST
@@ -18,19 +18,19 @@ val part2 = part2(inputParser, 154L) { trailMap ->
 fun findLongestPath(trailMap: TrailMap): Long {
     val maxX = trailMap.maxOf { it.key.x }
     val maxY = trailMap.maxOf { it.key.y }
-    val start = Coordinates(1, 0)
-    val goal = Coordinates(maxX - 1, maxY)
+    val start = Coordinates2d(1, 0)
+    val goal = Coordinates2d(maxX - 1, maxY)
 
-    val intersections = mutableMapOf<Coordinates, MutableList<Pair<Coordinates, Long>>>()
+    val intersections = mutableMapOf<Coordinates2d, MutableList<Pair<Coordinates2d, Long>>>()
     getIntersections(trailMap, intersections, maxX, maxY, start, goal, start, start, 0)
 
     return findLongestPathFromIntersection(intersections, goal, listOf(start), 0)
 }
 
 fun findLongestPathFromIntersection(
-    intersections: MutableMap<Coordinates, MutableList<Pair<Coordinates, Long>>>,
-    goal: Coordinates,
-    currentIntersectionPath: List<Coordinates>,
+    intersections: MutableMap<Coordinates2d, MutableList<Pair<Coordinates2d, Long>>>,
+    goal: Coordinates2d,
+    currentIntersectionPath: List<Coordinates2d>,
     currentLength: Long
 ): Long {
     val lastIntersection = currentIntersectionPath.last()
@@ -51,14 +51,14 @@ fun findLongestPathFromIntersection(
 }
 
 tailrec fun getIntersections(
-    trailMap: Map<Coordinates, TrailMapElement>,
-    intersections: MutableMap<Coordinates, MutableList<Pair<Coordinates, Long>>>,
+    trailMap: Map<Coordinates2d, TrailMapElement>,
+    intersections: MutableMap<Coordinates2d, MutableList<Pair<Coordinates2d, Long>>>,
     maxX: Long,
     maxY: Long,
-    startIntersection: Coordinates,
-    goal: Coordinates,
-    previousStep: Coordinates,
-    currentStep: Coordinates,
+    startIntersection: Coordinates2d,
+    goal: Coordinates2d,
+    previousStep: Coordinates2d,
+    currentStep: Coordinates2d,
     numberOfSteps: Long
 ) {
     if (intersections[currentStep]?.map { it.first }?.contains(startIntersection)?.not() != false) {

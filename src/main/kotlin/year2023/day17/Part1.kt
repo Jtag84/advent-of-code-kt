@@ -15,15 +15,15 @@ val part1 = part1(inputParser, 102) { heatLossMap ->
     val maxX = heatLossMap.keys.maxOf { it.x }
     val maxY = heatLossMap.keys.maxOf { it.y }
 
-    val start = CrucibleNode(Coordinates(0, 0), emptyList(), heatLossMap, maxX, maxY)
-    val goalCoordinates = Coordinates(heatLossMap.keys.maxOf { it.x }, heatLossMap.keys.maxOf { it.y })
+    val start = CrucibleNode(Coordinates2d(0, 0), emptyList(), heatLossMap, maxX, maxY)
+    val goalCoordinates = Coordinates2d(heatLossMap.keys.maxOf { it.x }, heatLossMap.keys.maxOf { it.y })
     val goal = CrucibleNode(goalCoordinates, emptyList(), heatLossMap, maxX, maxY)
     AStar.search(start, { node -> node.distanceTo(goal) }, { maybeGoal -> maybeGoal.coordinates == goalCoordinates })
         .first
 }
 
 data class CrucibleNode(
-    val coordinates: Coordinates,
+    val coordinates: Coordinates2d,
     val last3Directions: List<Direction>,
     private val heatLossMap: HeatLossMap,
     private val maxX: Long,

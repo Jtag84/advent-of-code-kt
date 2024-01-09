@@ -3,7 +3,7 @@ package year2020.day11
 import cc.ekblad.konbini.*
 import commons.*
 
-val inputParser = parser {
+val inputParser: Parser<Map<Coordinates2d, LayoutItem>> = parser {
     coordinatesParser(enumParser<LayoutItem>())().toMap()
 }
 

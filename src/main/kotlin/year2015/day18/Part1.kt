@@ -1,7 +1,6 @@
 package year2015.day18
 
 import commons.Part.Companion.part1
-import commons.aroundWithDiagonals
 
 fun main() {
     part1.runAndPrintTest()
@@ -15,7 +14,7 @@ val part1 = part1(inputParser, 4) { lightMap ->
 
 fun nextLightsState(lightMap: LightMap) : LightMap {
     return lightMap.mapValues {
-        val numberOfOnNeighbors = it.key.aroundWithDiagonals().mapNotNull {neighBor -> lightMap[neighBor] }.count { it == Light.ON }
+        val numberOfOnNeighbors = it.key.allAround().mapNotNull { neighBor -> lightMap[neighBor] }.count { it == Light.ON }
         when {
             it.value == Light.ON && numberOfOnNeighbors in 2..3 -> Light.ON
             it.value == Light.OFF && numberOfOnNeighbors == 3 -> Light.ON

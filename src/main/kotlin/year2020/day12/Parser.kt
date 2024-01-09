@@ -7,7 +7,7 @@ val inputParser: Parser<List<Instructon>> = parser {
     chain1(instructionParser, whitespace).terms
 }
 
-typealias ShipPosition = Pair<Coordinates, CardinalDirection>
+typealias ShipPosition = Pair<Coordinates2d, CardinalDirection>
 
 sealed class Instructon {
     data class North(val steps: Long) : Instructon()

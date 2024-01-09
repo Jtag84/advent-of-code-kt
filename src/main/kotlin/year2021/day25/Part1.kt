@@ -1,6 +1,6 @@
 package year2021.day25
 
-import commons.Coordinates
+import commons.Coordinates2d
 import commons.Part.Companion.part1
 import commons.east
 import commons.south
@@ -30,11 +30,11 @@ val part1 = part1(inputParser, 58) { seaMap ->
         .count()
 }
 
-fun movesOneStep(eastSeaCucumbers : Set<Coordinates>, southSeaCucumbers : Set<Coordinates>, maxX: Long, maxY:Long) : Pair<Set<Coordinates>, Set<Coordinates>> {
+fun movesOneStep(eastSeaCucumbers : Set<Coordinates2d>, southSeaCucumbers : Set<Coordinates2d>, maxX: Long, maxY:Long) : Pair<Set<Coordinates2d>, Set<Coordinates2d>> {
     val newEastSeaCucumbers = eastSeaCucumbers.map {
             val eastCoordinates = it.east()
             val newCoordinates = if (eastCoordinates.x > maxX) {
-                Coordinates(0, eastCoordinates.y)
+                Coordinates2d(0, eastCoordinates.y)
             }
             else {
                 eastCoordinates
@@ -52,7 +52,7 @@ fun movesOneStep(eastSeaCucumbers : Set<Coordinates>, southSeaCucumbers : Set<Co
     val newSouthSeaCucumber = southSeaCucumbers.map {
             val southCoordinates = it.south()
             val newCoordinates = if (southCoordinates.y > maxY) {
-                Coordinates(southCoordinates.x, 0)
+                Coordinates2d(southCoordinates.x, 0)
             }
             else {
                 southCoordinates

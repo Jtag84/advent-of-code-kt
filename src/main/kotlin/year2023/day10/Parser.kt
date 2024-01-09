@@ -5,7 +5,7 @@ import cc.ekblad.konbini.parser
 import commons.*
 import year2023.day10.Direction.*
 
-val inputParser: Parser<Map<Coordinates, Tile>> = parser {
+val inputParser: Parser<Map<Coordinates2d, Tile>> = parser {
     coordinatesParser(enumParser<Tile>())().toMap()
 }
 
@@ -30,11 +30,11 @@ enum class Tile(private val directionsMap: Map<Direction, Direction>, override v
     }
 }
 
-enum class Direction(val directionFunction: (Coordinates) -> Coordinates) {
-    NORTH(Coordinates::north),
-    SOUTH(Coordinates::south),
-    EAST(Coordinates::east),
-    WEST(Coordinates::west);
+enum class Direction(val directionFunction: (Coordinates2d) -> Coordinates2d) {
+    NORTH(Coordinates2d::north),
+    SOUTH(Coordinates2d::south),
+    EAST(Coordinates2d::east),
+    WEST(Coordinates2d::west);
 
     fun opposite(): Direction {
         return when (this) {
@@ -45,7 +45,7 @@ enum class Direction(val directionFunction: (Coordinates) -> Coordinates) {
         }
     }
 
-    fun move(coordinates: Coordinates): Coordinates {
+    fun move(coordinates: Coordinates2d): Coordinates2d {
         return directionFunction(coordinates)
     }
 }
