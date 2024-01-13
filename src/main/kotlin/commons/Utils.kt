@@ -1,8 +1,5 @@
 package commons
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import org.apache.commons.io.FileUtils
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -20,6 +17,10 @@ const val RESET_COLORS = "\u001b[0m"
 fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray()))
     .toString(16)
     .padStart(32, '0')
+
+fun Iterable<Any?>.printEachLine() {
+    this.forEach { it.println() }
+}
 
 /**
  * The cleaner shorthand for printing output.
@@ -40,10 +41,6 @@ fun <K, V> Map<K, V>.merge(otherMap: Map<K, V>, mergeValueFunction: (V, V) -> V)
         .mapValues { it.value.reduce(mergeValueFunction) }
 }
 
-suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.awaitAll()
-}
-
 fun <T> Sequence<T>.repeat() = sequence { while (true) yieldAll(this@repeat) }
 
 inline fun <T, R> Sequence<T>.foldUntil(initial: R, condition: (R) -> Boolean, operation: (acc: R, T) -> R): R {
@@ -58,20 +55,7 @@ inline fun <T, R> Sequence<T>.foldUntil(initial: R, condition: (R) -> Boolean, o
 fun <T> List<T>.groupNextToSame(): List<List<T>> {
     if (this.isEmpty()) return listOf()
 
-    val result = mutableListOf<List<T>>()
-    var currentGroup = mutableListOf(this.first())
-
-    for (i in 1 until this.size) {
-        if (this[i] == this[i - 1]) {
-            currentGroup.add(this[i])
-        } else {
-            result.add(currentGroup)
-            currentGroup = mutableListOf(this[i])
-        }
-    }
-    result.add(currentGroup)
-
-    return result
+    return this.asSequence().groupNextToSame().toList()
 }
 
 fun <T> Sequence<T>.groupNextToSame(): Sequence<List<T>> {
@@ -121,13 +105,28 @@ fun <T> List<T>.combinations(): List<List<T>> {
     return combinations
 }
 
+@JvmName("transposeLists")
 fun <T> List<List<T?>>.transpose(): List<List<T?>> {
     if (this.isEmpty() || this.first().isEmpty()) return emptyList()
 
     val transposeWidth = this.maxOf { it.size }
     return (0 until transposeWidth).map { col ->
-        this.map { row -> row.getOrNull(col) }
+        this.map { row -> row.get(col) }
     }
+}
+
+@JvmName("transposeStringLines")
+fun List<String>.transpose() : List<String> {
+    return this.map { it.toList() }.transpose().map { it.joinToString("") }
+}
+
+@JvmName("rotateClockwiseStringLines")
+fun List<String>.rotateClockwise() : List<String> {
+    return this.reversed().transpose()
+}
+
+fun <T> List<List<T?>>.rotateClockwise() : List<List<T?>> {
+    return this.reversed().transpose()
 }
 
 fun kotlin.time.Duration.toColorizedString(): String {
@@ -156,4 +155,26 @@ fun chineseRemainder(restModulos: Set< Pair<Rest, Modulo>>) : Long {
         val nProduct = coprimeProduct/modulo
         (1..modulo).asSequence().map { nProduct * it }.first { it % modulo == 1L } * rest
     } % coprimeProduct
+}
+
+fun <T> Iterable<T>.splitBy(predicate: (T) -> Boolean): List<List<T>> {
+    val result = mutableListOf<List<T>>()
+    var sublist = mutableListOf<T>()
+
+    for (item in this) {
+        if (predicate(item)) {
+            if (sublist.isNotEmpty()) {
+                result.add(sublist)
+                sublist = mutableListOf()
+            }
+        } else {
+            sublist.add(item)
+        }
+    }
+
+    if (sublist.isNotEmpty()) {
+        result.add(sublist)
+    }
+
+    return result
 }
