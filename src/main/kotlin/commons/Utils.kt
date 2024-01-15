@@ -178,3 +178,16 @@ fun <T> Iterable<T>.splitBy(predicate: (T) -> Boolean): List<List<T>> {
 
     return result
 }
+
+fun <T> Sequence<T>.takeUntil(predicate: (T) -> Boolean): Sequence<T> {
+    var shouldIncludeNext = true
+    return sequence {
+        for (element in this@takeUntil) {
+            yield(element)
+            if (shouldIncludeNext && predicate(element)) {
+                shouldIncludeNext = false
+            }
+            if (!shouldIncludeNext) break
+        }
+    }
+}
