@@ -191,3 +191,8 @@ fun <T> Sequence<T>.takeUntil(predicate: (T) -> Boolean): Sequence<T> {
         }
     }
 }
+
+fun Long.isOdd() = (this % 2 == 1L)
+fun Long.isEven() = (this % 2 == 0L)
+fun Int.isOdd() = (this % 2 == 1)
+fun Int.isEven() = (this % 2 == 0)

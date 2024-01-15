@@ -2,10 +2,25 @@ package commons
 
 import com.google.common.collect.Sets
 import commons.Direction.*
+import commons.*
 import kotlin.math.abs
 
 interface Coordinates<out T : Coordinates<T>> {
     fun allAround() : Set<T>
+}
+
+//https://www.gamedev.net/articles/programming/general-and-gameplay-programming/coordinates-in-hexagon-based-tile-maps-r1800/
+data class HexagonGridCoordinates (val x:Long, val y:Long) : Coordinates<HexagonGridCoordinates> {
+    fun northEast() = HexagonGridCoordinates((x + 1).takeIf {abs(y).isOdd()} ?: x , this.y - 1)
+    fun east(n: Long = 1) = HexagonGridCoordinates(this.x + n, this.y)
+    fun southEast() = HexagonGridCoordinates((x + 1).takeIf {abs(y).isOdd()} ?: x, this.y + 1)
+    fun southWest() = HexagonGridCoordinates((x - 1).takeIf {abs(y).isEven()} ?: x, this.y + 1)
+    fun west(n: Long = 1) = HexagonGridCoordinates(this.x - n, this.y)
+    fun northWest() = HexagonGridCoordinates((x - 1).takeIf {abs(y).isEven()} ?: x, this.y - 1)
+
+    override fun allAround(): Set<HexagonGridCoordinates> {
+        return setOf(northEast(), east(), southEast(), southWest(), west(), northWest())
+    }
 }
 
 data class Coordinates4d (val x:Long, val y:Long, val z:Long, val w: Long) : Coordinates<Coordinates4d> {
