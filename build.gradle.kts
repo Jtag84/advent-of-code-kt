@@ -23,6 +23,9 @@ dependencies {
     implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("org.ejml:ejml-simple:0.43.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
+    implementation("org.jgrapht:jgrapht-core:1.5.2")
+    implementation("org.jgrapht:jgrapht-io:1.5.2")
+    implementation("org.jgrapht:jgrapht-ext:1.5.2")
 }
 
 application {

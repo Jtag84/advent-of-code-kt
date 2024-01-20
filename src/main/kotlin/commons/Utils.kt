@@ -1,8 +1,16 @@
 package commons
 
+import com.mxgraph.layout.mxCircleLayout
+import com.mxgraph.layout.mxIGraphLayout
+import com.mxgraph.util.mxCellRenderer
 import org.apache.commons.io.FileUtils
+import org.jgrapht.Graph
+import org.jgrapht.ext.JGraphXAdapter
+import java.awt.Color
+import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
+import javax.imageio.ImageIO
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -203,4 +211,28 @@ fun gcd(a: Long, b: Long): Long {
 
 fun lcm(a: Long, b: Long): Long {
     return a * b / gcd(a, b)
+}
+
+fun Map<Coordinates2d, EnumParser>.printMap() {
+    this.entries.groupBy ({ it.key.y })
+        .mapValues { it.value.sortedBy { it.key.y }.map { it.value.parsingString }.joinToString("") }
+        .entries.sortedBy { it.key }.map { it.value }
+        .printEachLine()
+}
+
+fun <V,E> Graph<V,E>.printGraph(imagePath : String) {
+    val imgFile = File(imagePath)
+    imgFile.createNewFile()
+    val graphAdapter = JGraphXAdapter<V, E>(this)
+    graphAdapter.edgeToCellMap.forEach { (edge, mxCell) ->
+        // Assuming 'edge' has a method or property to get its weight
+        mxCell.value = this.getEdgeWeight(edge)
+    }
+
+    val layout: mxIGraphLayout = mxCircleLayout(graphAdapter)
+    layout.execute(graphAdapter.defaultParent)
+
+    val image =
+        mxCellRenderer.createBufferedImage(graphAdapter, null, 2.0, Color.WHITE, true, null)
+    ImageIO.write(image, "PNG", imgFile)
 }
