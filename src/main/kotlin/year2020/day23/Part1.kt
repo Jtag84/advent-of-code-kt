@@ -10,14 +10,14 @@ fun main() {
 
 val part1 = part1(inputParser, "67384529") { cups ->
     val (head, tail, nodeMap) = cups.toHeadTailAndNodeMap()
-    head.previous = tail
-    tail.next = head
+    head.setPrevious(tail)
+    tail.setNext(head)
 
     executeMoves(head, nodeMap, 100)
 
     val node1 = nodeMap[1]!!
 
-    node1.next!!.take(8).map { it.value }.joinToString("")
+    node1.next()!!.take(8).map { it.value }.joinToString("")
 }
 
 fun executeMoves(head: Head<Int>, nodeMap: NodeMap<Int>, numberOfMoves : Int, max:Int = 9): Head<Int> {
@@ -38,6 +38,6 @@ fun executeMoves(head: Head<Int>, nodeMap: NodeMap<Int>, numberOfMoves : Int, ma
         val destinationCupNode = nodeMap[destinationCup]!!
         destinationCupNode.insertSectionAfter(pickupCupsHead, pickUpCupTail)
 
-        currentHead.next!!
+        currentHead.next()!!
     }.drop(numberOfMoves).first()
 }

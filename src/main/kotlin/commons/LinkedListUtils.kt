@@ -3,8 +3,45 @@ package commons
 import arrow.core.tail
 
 class LinkedListNode<T>(val value:T) : Iterable<LinkedListNode<T>>{
-    var previous: LinkedListNode<T>? = null
-    var next: LinkedListNode<T>? = null
+    private var reversed = false
+
+    private var previous: LinkedListNode<T>? = null
+
+    private var next: LinkedListNode<T>? = null
+
+    fun setPrevious(previous: LinkedListNode<T>?) {
+        this.previous = previous
+    }
+
+    fun setNext(next: LinkedListNode<T>?) {
+        this.next = next
+    }
+
+    fun previous(n:Long= 1) : LinkedListNode<T>? {
+        return when {
+            n == 0L -> this
+            n > 0 -> previous?.also { if (it.reversed != reversed) {it.reverse()} }?.previous(n-1)
+            n < 0 -> previous?.also { if (it.reversed != reversed) {it.reverse()} }?.next((-n)-1)
+            else -> throw IllegalStateException()
+        }
+    }
+
+    fun next(n:Long = 1) : LinkedListNode<T>? {
+        return when {
+            n == 0L -> this
+            n > 0 -> next?.also { if (it.reversed != reversed) {it.reverse()} }?.next(n-1)
+            n < 0 -> next?.also { if (it.reversed != reversed) {it.reverse()} }?.previous((-n)-1)
+            else -> throw IllegalStateException()
+        }
+    }
+
+    fun reverse() : LinkedListNode<T> {
+        val savedPrevious = previous
+        previous = next
+        next = savedPrevious
+        reversed = reversed.not()
+        return this
+    }
 
     fun insertNodeAfter(node: LinkedListNode<T>) {
         val nodeNext = next
@@ -76,7 +113,7 @@ class LinkedListNodeIterator<T>(private var currentLinkedListNode: LinkedListNod
 
     override fun next(): LinkedListNode<T> {
         val toReturn = currentLinkedListNode!!
-        this.currentLinkedListNode = currentLinkedListNode!!.next
+        this.currentLinkedListNode = currentLinkedListNode!!.next()
         return toReturn
     }
 
@@ -86,7 +123,7 @@ class LinkedListNodeIterator<T>(private var currentLinkedListNode: LinkedListNod
 
     override fun previous(): LinkedListNode<T> {
         val toReturn = currentLinkedListNode!!
-        this.currentLinkedListNode = currentLinkedListNode!!.previous
+        this.currentLinkedListNode = currentLinkedListNode!!.previous()
         return toReturn
     }
 
@@ -114,4 +151,20 @@ fun <T> MutableMap<T,LinkedListNode<T>>.createNode(value: T) : LinkedListNode<T>
     val newNode = LinkedListNode(value)
     this.put(value, newNode)
     return newNode
+}
+
+fun <T> Iterable<T>.toLinkedList() : Pair<Head<T>, Tail<T>>? {
+    val iterator = this.iterator()
+    if(!iterator.hasNext()) {
+        return null
+    }
+
+    val head = Head(this.first())
+    val tail = this.drop(1).fold(head) { previousNode, newValue ->
+        val node = LinkedListNode(newValue)
+        previousNode.setNext(node)
+        node.setPrevious(previousNode)
+        node
+    }
+    return head to tail
 }
