@@ -13,9 +13,7 @@ fun main() {
 val part2 = part2(inputParser, 9L.toBigInteger()) { techniques ->
     val size = if(isTest) {10L.toBigInteger()} else {119_315_717_514_047L.toBigInteger()}
 
-    val indexFunction = techniques
-        .fold(CardShuffleLCF(BigInteger.ONE, BigInteger.ZERO, size))
-        { cardShuffleLCF, shuffleTechnique -> cardShuffleLCF.compose(shuffleTechnique.toCardShuffleLCF(size))}
+    val indexFunction = getIndexFunction(techniques, size)
 
     val ktimesIndexFunction = pow_compose(indexFunction, 101_741_582_076_661L.toBigInteger())
     ktimesIndexFunction.apply(2020L.toBigInteger())
@@ -57,18 +55,4 @@ fun pow_compose(functionToCompose: CardShuffleLCF, kTimes: BigInteger) : CardShu
         f = f.compose(f)
     }
     return g
-}
-
-fun CardShuffleTechnique.toCardShuffleLCF(cardDeckSize: BigInteger) : CardShuffleLCF {
-    return when(this){
-        is CardShuffleTechnique.CutNCards -> {
-            val effectiveCut = if(this.n < 0) {cardDeckSize + this.n.toBigInteger()} else {this.n.toBigInteger()}
-            CardShuffleLCF(BigInteger.ONE, effectiveCut, cardDeckSize)
-        }
-        CardShuffleTechnique.DealIntoNewStack -> {CardShuffleLCF((-1).toBigInteger(), (cardDeckSize - BigInteger.ONE), cardDeckSize) }
-        is CardShuffleTechnique.DealWithIncrementN -> {
-            val effectiveModulus = this.n.toBigInteger().modInverse(cardDeckSize)
-            return CardShuffleLCF(effectiveModulus, BigInteger.ZERO, cardDeckSize)
-        }
-    }
 }
