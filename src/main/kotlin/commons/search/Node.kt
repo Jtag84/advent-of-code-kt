@@ -4,7 +4,7 @@ import org.jgrapht.Graph
 
 
 abstract class Node<T : Node<T>> : Comparable<Node<*>> {
-    private var fScore: Int = Int.MAX_VALUE
+    var fScore: Int = Int.MAX_VALUE
 
     abstract fun getNeighbors(): Collection<T>
 

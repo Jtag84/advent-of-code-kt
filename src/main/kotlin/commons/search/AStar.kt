@@ -3,7 +3,11 @@ package commons.search
 import java.util.*
 
 object AStar {
-    fun <T : Node<T>> search(start: T, heuristic: (T) -> Int, isGoal: (T) -> Boolean): Pair<Int, List<T>> {
+    fun <T : Node<T>> search(start: T,
+                             heuristic: (T) -> Int,
+                             isGoal: (T) -> Boolean,
+                             isNeighborPathPriority: (cameFrom: Map<T, T>, currentNode: T, neighbor: T ) -> Boolean = { _, _, _ -> false}
+    ): Pair<Int, List<T>> {
         // Set of nodes already evaluated
         val closedSet: MutableSet<T> = HashSet()
 
@@ -43,7 +47,9 @@ object AStar {
                 // The distance from start to a neighbor
                 val tentativeGScore: Int = (gScore[current] ?: 0) + current.distanceTo(neighbor)
 
-                if (tentativeGScore >= gScore.getOrDefault(neighbor, Int.MAX_VALUE)) {
+                val currentGscore = gScore.getOrDefault(neighbor, Int.MAX_VALUE)
+                if (tentativeGScore > currentGscore
+                    || tentativeGScore == currentGscore && isNeighborPathPriority(cameFrom, current, neighbor).not()) {
                     // This is not a better path.
                     continue
                 }
@@ -61,7 +67,7 @@ object AStar {
         return Pair(-1, emptyList())
     }
 
-    private fun <T : Node<T>> reconstructPath(cameFrom: Map<T, T>, current: T): List<T> {
+    fun <T : Node<T>> reconstructPath(cameFrom: Map<T, T>, current: T): List<T> {
         return generateSequence(current) { cameFrom[it] }.toList()
     }
 }
