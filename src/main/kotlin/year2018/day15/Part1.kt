@@ -32,7 +32,7 @@ fun combat(
         val fighterSequence = (currentElves + currentGoblins).asSequence()
             .sortedWith(Comparator.comparing({ it.coordinates }, readerOrderCoordinatesComparator(maxX)))
 
-        fighterSequence
+        val result = fighterSequence
             .foldUntil(
                 currentElvesGoblins,
                 { it.first.isEmpty() || it.second.isEmpty() },
@@ -40,6 +40,17 @@ fun combat(
                     dontCountLastRound = currentFighter != fighterSequence.last()
                     executeCombatRule(cavernMap, maxX, acc, currentFighter, hitBy)
                 })
+        // debug print each position
+//        val cavernMapToPrint = cavernMap.toMutableMap()
+//        currentElves.forEach { cavernMapToPrint.put(it.coordinates, CavernMap.PRE_ELF) }
+//        currentGoblins.forEach { cavernMapToPrint.put(it.coordinates, CavernMap.PRE_GOBLIN) }
+//        result.first.forEach { cavernMapToPrint.put(it.coordinates, CavernMap.ELF) }
+//        result.second.forEach { cavernMapToPrint.put(it.coordinates, CavernMap.GOBLIN) }
+//        cavernMapToPrint.printMap()
+//        result.first.sortedBy { it.id }.println()
+//        result.second.sortedBy { it.id }.println()
+//        "----------------".println()
+        result
     }
     .withIndex()
     .dropWhile { fighters -> fighters.value.first.isNotEmpty() && fighters.value.second.isNotEmpty() }
@@ -149,12 +160,13 @@ fun calculatePath(cavernMap: Map<Coordinates2d, CavernMap>, maxX: Long, allFight
         val node = CavernNode(cavernMap, maxX, allFighters, currentFighter)
         AStar.search(
             node,
-            {it.coordinates.manhattanDistance(enemy).toInt()},
+//            {it.coordinates.manhattanDistance(enemy).toInt()}, // this heuristic only works for part 1, due to some priority path constraint and the inputs, this doesn't work
+            {1}, // setting the heuristic to 1 should be equivalent to djikstra in the end
             {it.coordinates == enemy},
             {cameFrom, currentNode, neighbor ->
-                val currentNodePathScore = AStar.reconstructPath(cameFrom, currentNode).sumOf { it.coordinates.x + it.coordinates.y * maxX }
-                val neighborPathScore = AStar.reconstructPath(cameFrom, neighbor).tail().sumOf { it.coordinates.x + it.coordinates.y * maxX }
-                neighborPathScore > currentNodePathScore
+                val currentNodePath = AStar.reconstructPath(cameFrom, currentNode).reversed()
+                val neighborPath = AStar.reconstructPath(cameFrom, neighbor).tail().reversed()
+                readerOrderCoordinatesComparator(maxX).compare(neighborPath[1].coordinates, currentNodePath[1].coordinates) > 0
             }
         )
         .let { it.first to it.second.map { it.coordinates } }
